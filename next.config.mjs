@@ -13,6 +13,7 @@ const nextConfig = {
                 hostname: 'img.clerk.com',
             },
         ],
+        unoptimized: true
     },
 };
 
