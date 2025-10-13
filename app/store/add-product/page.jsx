@@ -1,5 +1,7 @@
 'use client'
 import { assets } from "@/assets/assets"
+import { useAuth } from "@clerk/nextjs"
+import axios from "axios"
 import Image from "next/image"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
@@ -17,16 +19,99 @@ export default function StoreAddProduct() {
         category: "",
     })
     const [loading, setLoading] = useState(false)
+    const [aiUsed, setAiUsed] = useState(false)
 
+    const { getToken } = useAuth();
 
     const onChangeHandler = (e) => {
         setProductInfo({ ...productInfo, [e.target.name]: e.target.value })
     }
 
+    const handleImageUpload = async (key, file) => {
+        setImages(prev => ({ ...prev, [key]: file }))
+        if (key === "1" && file && !aiUsed) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file)
+            reader.onloadend = async () => {
+                const base64String = reader.result.split(",")[1]
+                const mimeType = file.type;
+                const token = await getToken();
+
+                try {
+                    await toast.promise(
+                        axios.post('/api/store/ai', { base64Image: base64String, mimeType }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }), {
+                        loading: "Analyzing image with AI...",
+                        success: (res) => {
+                            const data = res.data
+                            if (data.name && data.description) {
+                                setProductInfo(prev => ({
+                                    ...prev,
+                                    name: data.name,
+                                    description: data.description
+                                }))
+                                setAiUsed(true);
+                                return "AI filled product info 🎉"
+                            }
+                            return "AI could not analyze the image"
+                        },
+                        error: (err) => err?.response?.data?.error || err.message
+                    }
+                    )
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+        }
+    }
+
     const onSubmitHandler = async (e) => {
         e.preventDefault()
-        // Logic to add a product
+        try {
+            //if no images are uploaded then return
+            if (!images[1] && !images[2] && !images[3] && !images[4]) {
+                return toast.error('Please upload atleast one image')
+            }
+            setLoading(true);
+            const formData = new FormData();
+            formData.append('name', productInfo.name)
+            formData.append('description', productInfo.description)
+            formData.append('mrp', productInfo.mrp)
+            formData.append('price', productInfo.price)
+            formData.append('category', productInfo.category)
 
+            //Adding Images to FormData
+            Object.keys(images).forEach((key) => {
+                images[key] && formData.append('images', images[key])
+            })
+
+            const token = await getToken();
+            const { data } = await axios.post('/api/store/product', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            toast.success(data.message);
+
+            //reset form
+            setProductInfo({
+                name: "",
+                description: "",
+                mrp: 0,
+                price: 0,
+                category: "",
+            });
+            //reset images
+            setImages({ 1: null, 2: null, 3: null, 4: null })
+        } catch (error) {
+            toast.error(error?.response?.data?.error || error.message);
+        } finally {
+            setLoading(false);
+        }
     }
 
 
@@ -39,7 +124,8 @@ export default function StoreAddProduct() {
                 {Object.keys(images).map((key) => (
                     <label key={key} htmlFor={`images${key}`}>
                         <Image width={300} height={300} className='h-15 w-auto border border-slate-200 rounded cursor-pointer' src={images[key] ? URL.createObjectURL(images[key]) : assets.upload_area} alt="" />
-                        <input type="file" accept='image/*' id={`images${key}`} onChange={e => setImages({ ...images, [key]: e.target.files[0] })} hidden />
+                        <input type="file" accept='image/*' id={`images${key}`}
+                            onChange={e => handleImageUpload(key, e.target.files[0])} hidden />
                     </label>
                 ))}
             </div>
