@@ -18,6 +18,13 @@
   }
 }
 
+@theme {
+  --color-primary: #6b8271;
+  --color-secondary: #f0f2ed;
+  --color-customBlack: #1d1d1d;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+

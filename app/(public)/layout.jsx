@@ -36,11 +36,11 @@ export default function PublicLayout({ children }) {
     }, [cartItems]);
 
     return (
-        <>
+        <div className="bg-secondary">
             <Banner />
             <Navbar />
             {children}
             <Footer />
-        </>
+        </div>
     );
 }
