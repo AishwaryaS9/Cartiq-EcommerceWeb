@@ -25,7 +25,7 @@ const Navbar = () => {
     const navLinkClass = "text-sm font-light uppercase tracking-wide";
 
     return (
-        <nav className="bg-[#F7F7F7] border-b border-customBlack/10 sticky top-0 z-50">
+        <nav className="bg-white border-b border-customBlack/10 sticky top-0 z-50">
             <div className="mx-6">
                 <div className="flex items-center justify-between max-w-7xl mx-auto py-4 transition-all">
 
@@ -47,7 +47,7 @@ const Navbar = () => {
 
                     <div className="flex items-center gap-4 sm:gap-6">
 
-                        <form onSubmit={handleSearch} className="hidden xl:flex items-center w-64 text-sm gap-2 bg-white px-4 py-2 border border-customBlack/10 rounded-full shadow-sm">
+                        <form onSubmit={handleSearch} className="hidden xl:flex items-center w-64 text-sm gap-2 bg-white px-4 py-2 border border-customBlack/10 rounded-full shadow-xs">
                             <Search size={iconSize} className="text-customBlack/70" />
                             <input
                                 className="w-full bg-transparent outline-none placeholder-customBlack/60 text-customBlack"
