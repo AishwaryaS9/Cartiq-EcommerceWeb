@@ -28,8 +28,16 @@ export default function Product() {
             <div className="max-w-7xl mx-auto">
 
                 {/* Breadcrums */}
-                <div className="  text-gray-600 text-sm mt-8 mb-5">
-                    Home / Products / {product?.category}
+                <div className="flex flex-wrap items-center space-x-2 font-normal text-customBlack text-sm mt-8 mb-5">
+                    <a href="/">Home</a>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.784 15.68 11.46 4.13h1.75L8.534 15.68z" fill="#CBD5E1" />
+                    </svg>
+                    <a href="/shop">Products</a>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.784 15.68 11.46 4.13h1.75L8.534 15.68z" fill="#CBD5E1" />
+                    </svg>
+                    <a href="#" className="text-primary">{product?.category}</a>
                 </div>
 
                 {/* Product Details */}
