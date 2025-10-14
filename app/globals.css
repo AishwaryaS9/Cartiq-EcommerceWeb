@@ -20,7 +20,8 @@
 
 @theme {
   --color-primary: #6b8271;
-  --color-secondary: #f0f2ed;
+  /* --color-secondary: #f0f2ed; */
+  --color-secondary: #F7F7F7;
   --color-customBlack: #1d1d1d;
 }
 
