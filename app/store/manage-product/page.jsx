@@ -96,7 +96,7 @@ export default function StoreManageProducts() {
                                             checked={product.inStock}
                                             onChange={() => toast.promise(toggleStock(product.id), { loading: "Updating stock..." })}
                                         />
-                                        <div className="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-primary transition-colors duration-300"></div>
+                                        <div className="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-green-500 transition-colors duration-300"></div>
                                         <span className="absolute left-1 top-1 w-3 h-3 bg-white rounded-full transition-transform duration-300 ease-in-out peer-checked:translate-x-5"></span>
                                     </label>
                                 </td>
@@ -145,7 +145,7 @@ export default function StoreManageProducts() {
                                     checked={product.inStock}
                                     onChange={() => toast.promise(toggleStock(product.id), { loading: "Updating stock..." })}
                                 />
-                                <div className="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-primary transition-colors duration-300"></div>
+                                <div className="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-green-500 transition-colors duration-300"></div>
                                 <span className="absolute left-1 top-1 w-3 h-3 bg-white rounded-full transition-transform duration-300 ease-in-out peer-checked:translate-x-5"></span>
                             </label>
                         </div>

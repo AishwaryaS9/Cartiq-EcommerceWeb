@@ -50,9 +50,6 @@ export default function AdminStores() {
         <div className="text-slate-600 mb-28 px-4 md:px-8">
             {/* Header */}
             <div className="mb-6 text-center md:text-left">
-                {/* <h1 className="text-3xl font-semibold text-slate-800 flex items-center justify-center md:justify-start gap-2">
-                    <Building2 className="w-7 h-7 text-indigo-600" /> Live Stores
-                </h1> */}
                 <h1 className="text-2xl font-semibold text-primary">
                     Live <span className="text-customBlack">Stores</span>
                 </h1>
