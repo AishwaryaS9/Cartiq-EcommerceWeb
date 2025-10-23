@@ -37,8 +37,8 @@ const ProductDetails = ({ product }) => {
                             whileTap={{ scale: 0.95 }}
                             onClick={() => setMainImage(image)}
                             className={`flex items-center justify-center size-24 sm:size-20 cursor-pointer rounded-xl border-1 transition-all duration-300 ${mainImage === image
-                                ? "border-primary bg-green-50"
-                                : "border-transparent bg-slate-100 "
+                                ? "border-primary bg-slate-50"
+                                : "border-transparent bg-slate-50"
                                 }`}
                         >
                             <Image

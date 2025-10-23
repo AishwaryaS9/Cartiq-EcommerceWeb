@@ -1,76 +1,17 @@
-// 'use client'
-// import { assets } from '@/assets/assets'
-// import Image from 'next/image'
-// import React from 'react'
-// import CategoriesMarquee from './CategoriesMarquee'
-// import { ArrowRightIcon } from 'lucide-react'
-
-// const Hero = () => {
-//     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$'
-
-//     return (
-//         <section className="relative w-full overflow-hidden bg-secondary">
-//             {/* Soft gradient background using theme colors */}
-//             <div className="absolute inset-0 bg-gradient-to-r from-primary/50 via-secondary to-primary/90 blur-3xl opacity-60 -z-10" />
-
-//             <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center justify-between px-6 py-20 md:py-28 gap-10">
-//                 {/* Left text section */}
-//                 <div className="flex-1 text-center md:text-left">
-//                     <h1 className="text-4xl sm:text-6xl font-semibold leading-tight bg-gradient-to-r from-customBlack to-primary bg-clip-text text-transparent">
-//                         Discover gadgets that spark joy.
-//                     </h1>
-
-//                     <p className="text-[--color-customBlack]/70 mt-5 max-w-md mx-auto md:mx-0 text-base sm:text-lg">
-//                         Premium tech accessories, starting from just{' '}
-//                         <span className="font-semibold">{currency}4.90</span>. Designed to make your
-//                         everyday smarter, simpler, and more fun.
-//                     </p>
-
-//                     <div className="flex items-center justify-center md:justify-start gap-4 mt-8">
-//                         <button className="bg-primary text-white text-sm sm:text-base py-3 px-8 rounded-xl hover:bg-primary/90 hover:scale-105 active:scale-95 transition">
-//                             Shop Now
-//                         </button>
-//                         <button className="flex items-center gap-2 text-customBlack/80 hover:text-customBlack transition text-sm sm:text-base">
-//                             Learn More <ArrowRightIcon size={18} />
-//                         </button>
-//                     </div>
-//                 </div>
-
-//                 {/* Right image section */}
-//                 <div className="flex-1 relative flex justify-center">
-//                     <div className="relative">
-//                         <Image
-//                             src={assets.hero_model_img1}
-//                             alt="Featured product"
-//                             className="w-[90%] sm:w-[400px] drop-shadow-2xl"
-//                             priority
-//                         />
-//                         {/* Subtle glow using primary tone */}
-//                         <div className="absolute inset-0 bg-primary/40 rounded-full blur-3xl opacity-50 -z-10" />
-//                     </div>
-//                 </div>
-//             </div>
-
-//             {/* Categories section below hero */}
-//             <CategoriesMarquee />
-//         </section>
-//     )
-// }
-
-// export default Hero
-
-
 'use client'
 import { assets } from '@/assets/assets'
 import Image from 'next/image'
 import React from 'react'
 import { ArrowRightIcon, StarIcon } from 'lucide-react'
 import CategoriesMarquee from './CategoriesMarquee'
+import { useRouter } from 'next/navigation'
 
 const Hero = () => {
     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || 'USD'
 
     const backgroundClass = "bg-secondary min-h-[85vh] flex flex-col justify-end"
+
+    const router = useRouter();
 
     return (
         <section className={`relative w-full overflow-hidden ${backgroundClass}`}>
@@ -129,7 +70,8 @@ const Hero = () => {
                             Smart devices for the modern minimalist. Crafted to simplify your routines — and upgrade your lifestyle.
                         </p>
 
-                        <button className="flex items-center gap-2 bg-primary text-white text-base py-3 px-6 rounded-full hover:bg-primary/90 transition shadow-lg">
+                        <button onClick={() => router.push('/shop')}
+                            className="flex items-center gap-2 bg-primary text-white text-base py-3 px-6 rounded-full hover:bg-primary/90 transition shadow-lg">
                             Shop Now
                             <ArrowRightIcon size={16} />
                         </button>
@@ -151,7 +93,7 @@ const Hero = () => {
             </div>
 
             <CategoriesMarquee />
-        </section>
+        </section >
     )
 }
 
