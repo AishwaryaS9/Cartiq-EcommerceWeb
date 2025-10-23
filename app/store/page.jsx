@@ -56,8 +56,8 @@ export default function Dashboard() {
 
     return (
         <div className="text-slate-700 mb-28 px-4 sm:px-6 lg:px-10">
-            <h1 className="text-2xl font-semibold mb-8 text-[var(--color-primary)]">
-                Seller <span className="text-[var(--color-customBlack)]">Dashboard</span>
+            <h1 className="text-2xl font-semibold mb-8 text-color-primary">
+                Seller <span className="text-customBlack">Dashboard</span>
             </h1>
 
             {/* Dashboard Summary Cards */}
@@ -72,9 +72,9 @@ export default function Dashboard() {
                     >
                         <div className="flex justify-between items-center">
                             <p className="text-sm font-medium text-slate-500">{card.title}</p>
-                            <card.icon size={28} className="text-[var(--color-primary)] opacity-80" />
+                            <card.icon size={28} className="text-primary opacity-80" />
                         </div>
-                        <h2 className="text-2xl font-semibold mt-3 text-[var(--color-customBlack)] tracking-tight">
+                        <h2 className="text-2xl font-semibold mt-3 textcustomBlack tracking-tight">
                             {card.value}
                         </h2>
                     </motion.div>
@@ -83,7 +83,7 @@ export default function Dashboard() {
 
             {/* Latest Reviews Section */}
             <div className="mt-16 max-w-5xl">
-                <h2 className="text-xl font-semibold text-[var(--color-customBlack)] mb-4 flex items-center gap-2">
+                <h2 className="text-xl font-semibold text-customBlack mb-4 flex items-center gap-2">
                     <StarIcon className="text-yellow-500" size={22} /> Latest Reviews
                 </h2>
 
@@ -109,7 +109,7 @@ export default function Dashboard() {
                                         className="rounded-full object-cover w-12 h-12"
                                     />
                                     <div>
-                                        <p className="font-medium text-[var(--color-customBlack)]">
+                                        <p className="font-medium text-customBlack">
                                             {review.user.name}
                                         </p>
                                         <p className="text-xs text-slate-500">
@@ -140,7 +140,7 @@ export default function Dashboard() {
 
                                     <button
                                         onClick={() => router.push(`/product/${review.product.id}`)}
-                                        className="mt-3 text-sm text-[var(--color-primary)] border border-slate-300 px-4 py-1.5 rounded-md hover:bg-[var(--color-secondary)] transition-all"
+                                        className="mt-3 text-sm text-primary border border-slate-300 px-4 py-1.5 rounded-md hover:bg-secondary transition-all"
                                     >
                                         View Product
                                     </button>
