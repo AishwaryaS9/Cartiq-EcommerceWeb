@@ -10,6 +10,9 @@ const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "500", "600"
 export const metadata = {
   title: "Cartiq. - Shopping made simple",
   description: "Cartiq. - Shopping made simple",
+  icons: {
+    icon: "/favicon.png",
+  }
 };
 
 export default function RootLayout({ children }) {
