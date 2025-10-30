@@ -48,8 +48,8 @@ const Navbar = () => {
                     <div className="hidden md:flex items-center gap-4 lg:gap-8">
                         <Link href="/" className={`${navLinkClass} ${textBase}`}>Home</Link>
                         <Link href="/shop" className={`${navLinkClass} ${textBase}`}>Shop</Link>
-                        <Link href="/" className={`${navLinkClass} ${textBase}`}>About</Link>
-                        <Link href="/" className={`${navLinkClass} ${textBase}`}>Contact</Link>
+                        <Link href="/about" className={`${navLinkClass} ${textBase}`}>About</Link>
+                        <Link href="/contact" className={`${navLinkClass} ${textBase}`}>Contact</Link>
                     </div>
 
                     <Link href="/" className="relative text-3xl font-semibold text-customBlack">
