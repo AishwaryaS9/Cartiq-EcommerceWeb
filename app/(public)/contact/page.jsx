@@ -1,10 +1,15 @@
 "use client"
+import PageTitle from '@/components/PageTitle'
 import React from 'react'
 
 export default function Contact() {
   return (
     <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-2xl font-medium text-slate-500 my-6 flex items-center gap-2">Contact <span className="text-slate-700 font-medium">Us</span></h1>
+      {/* <h1 className="text-2xl font-medium text-slate-500 my-6 flex items-center gap-2">Contact <span className="text-slate-700 font-medium">Us</span></h1> */}
+      <PageTitle
+        heading="Contact"
+        highlight="Us"
+      />
       <p className="text-gray-700 mb-6">
         Have a question, feedback, or need support? We'd love to hear from you.
       </p>

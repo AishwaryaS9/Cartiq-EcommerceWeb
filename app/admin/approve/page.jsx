@@ -56,7 +56,7 @@ export default function AdminApprove() {
                     {/* <h1 className="text-3xl font-semibold text-slate-800 flex items-center gap-2">
                         Approve Stores
                     </h1> */}
-                    <h1 className="text-2xl font-semibold text-primary">
+                    <h1 className="text-2xl font-medium text-primary">
                         Approve <span className="text-customBlack">Stores</span>
                     </h1>
                     <p className="text-sm text-slate-500 mt-1">

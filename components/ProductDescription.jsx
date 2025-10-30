@@ -35,7 +35,7 @@ const ProductDescription = ({ product }) => {
                             <div>
                                 <div className="flex items-center" >
                                     {Array(5).fill('').map((_, index) => (
-                                        <StarIcon key={index} size={18} className='text-transparent mt-0.5' fill={item.rating >= index + 1 ? "#00C950" : "#D1D5DB"} />
+                                        <StarIcon key={index} size={18} className='text-transparent mt-0.5' fill={item.rating >= index + 1 ? "#FFC107" : "#D1D5DB"} />
                                     ))}
                                 </div>
                                 <p className="text-sm max-w-lg my-4">{item.review}</p>

@@ -54,7 +54,7 @@ export default function AdminDashboard() {
 
     return (
         <div className="text-slate-700 mb-20 px-4 sm:px-6 lg:px-10">
-            <h1 className="text-2xl font-semibold mb-8 text-primary">
+            <h1 className="text-2xl font-medium mb-8 text-primary">
                 Admin <span className="text-customBlack">Dashboard</span>
             </h1>
 
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
 
             {/* Orders Area Chart */}
             <div className="mt-16 p-6 rounded-2xl bg-white ">
-                <h2 className="text-lg font-semibold text-customBlack mb-4">
+                <h2 className="text-lg font-medium text-customBlack mb-4">
                     Orders Overview
                 </h2>
                 <p className="text-sm text-slate-500 mb-6">

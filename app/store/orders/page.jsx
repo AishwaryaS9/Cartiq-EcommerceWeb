@@ -56,7 +56,7 @@ export default function StoreOrders() {
 
     return (
         <div className="text-slate-700 mb-20">
-            <h1 className="text-2xl font-semibold mb-8 text-primary">
+            <h1 className="text-2xl font-medium mb-8 text-primary">
                 Store <span className="text-customBlack">Orders</span>
             </h1>
 

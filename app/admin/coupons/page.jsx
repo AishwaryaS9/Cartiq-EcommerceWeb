@@ -78,7 +78,7 @@ export default function AdminCoupons() {
         <div className="text-slate-700 mb-32 px-4 md:px-8">
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-2xl font-semibold text-primary">
+                <h1 className="text-2xl font-medium text-primary">
                     Add <span className="text-customBlack">Coupon</span>
                 </h1>
                 <p className="text-sm text-slate-400 mt-1">
@@ -190,7 +190,7 @@ export default function AdminCoupons() {
 
             {/* Coupon List */}
             <div className="mt-14">
-                <h2 className="text-xl font-semibold text-slate-800 mb-4">
+                <h2 className="text-xl font-medium text-slate-800 mb-4">
                     Existing Coupons
                 </h2>
                 <div className="overflow-x-auto border border-slate-200 rounded-xl bg-white shadow-sm max-w-5xl">

@@ -72,7 +72,7 @@ const ProductDetails = ({ product }) => {
 
             {/* RIGHT SECTION - DETAILS */}
             <div className="flex-1">
-                <h1 className="text-3xl font-semibold text-slate-900 leading-tight">
+                <h1 className="text-3xl font-medium text-slate-600 leading-tight">
                     {product.name}
                 </h1>
 
@@ -85,7 +85,7 @@ const ProductDetails = ({ product }) => {
                                 key={index}
                                 size={16}
                                 className="text-transparent mt-0.5"
-                                fill={averageRating >= index + 1 ? "#10B981" : "#E5E7EB"}
+                                fill={averageRating >= index + 1 ? "#FFC107" : "#E5E7EB"}
                             />
                         ))}
                     <p className="text-sm ml-3 text-slate-500">
@@ -124,7 +124,7 @@ const ProductDetails = ({ product }) => {
                         </div>
                     )}
 
-                    <motion.button
+                    {/* <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() =>
@@ -133,7 +133,14 @@ const ProductDetails = ({ product }) => {
                         className="bg-primary text-white px-10 py-3 text-sm font-medium rounded-full shadow-md hover:bg-primary/80 active:scale-95 transition-all"
                     >
                         {!cart[productId] ? "Add to Cart" : "View Cart"}
-                    </motion.button>
+                    </motion.button> */}
+                    <button onClick={() =>
+                        !cart[productId] ? addToCartHandler() : router.push("/cart")
+                    }
+                        className="bg-primary text-white px-10 py-3 text-sm font-medium rounded-full shadow-xs hover:bg-primary/80"
+                    >
+                        {!cart[productId] ? "Add to Cart" : "View Cart"}
+                    </button>
                 </div>
 
                 <hr className="border-gray-200 my-8" />

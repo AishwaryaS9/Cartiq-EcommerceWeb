@@ -21,7 +21,8 @@ const ProductCard = ({ product }) => {
                     <p>{product.name}</p>
                     <div className='flex'>
                         {Array(5).fill('').map((_, index) => (
-                            <StarIcon key={index} size={14} className='text-transparent mt-0.5' fill={rating >= index + 1 ? "#00C950" : "#D1D5DB"} />
+                            <StarIcon key={index} size={14} className='text-transparent mt-0.5' 
+                            fill={rating >= index + 1 ? "#FFC107" : "#D1D5DB"} />
                         ))}
                     </div>
                 </div>

@@ -1,11 +1,16 @@
 "use client"
 
+import PageTitle from '@/components/PageTitle'
 import React from 'react'
 
 export default function About() {
   return (
     <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-2xl font-medium text-slate-500 my-6 flex items-center gap-2">About <span className="text-slate-700 font-medium">Us</span></h1>
+      {/* <h1 className="text-2xl font-medium text-slate-500 my-6 flex items-center gap-2">About <span className="text-slate-700 font-medium">Us</span></h1> */}
+      <PageTitle
+        heading="About"
+        highlight="Us"
+      />
       <p className="text-gray-700 mb-4">
         Welcome to Cartiq — your trusted eCommerce platform for smart shopping.
         We believe in simplifying your online shopping experience by combining

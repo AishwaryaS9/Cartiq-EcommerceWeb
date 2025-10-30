@@ -50,12 +50,13 @@ export default function AdminStores() {
         <div className="text-slate-600 mb-28 px-4 md:px-8">
             {/* Header */}
             <div className="mb-6 text-center md:text-left">
-                <h1 className="text-2xl font-semibold text-primary">
+                <h1 className="text-2xl font-medium text-primary">
                     Live <span className="text-customBlack">Stores</span>
                 </h1>
                 <p className="text-sm text-slate-400 mt-1">
                     Manage store visibility and status
                 </p>
+
             </div>
 
             {/* Store List */}

@@ -49,7 +49,7 @@ export default function StoreManageProducts() {
 
     return (
         <div className="mb-28 text-slate-700">
-            <h1 className="text-2xl font-semibold mb-8 text-primary">
+            <h1 className="text-2xl font-medium mb-8 text-primary">
                 Manage <span className="text-customBlack">Products</span>
             </h1>
 
