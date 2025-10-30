@@ -212,7 +212,7 @@ export default function Dashboard() {
     if (loading) return <Loading />
 
     return (
-        <div className="text-slate-700 mb-28 px-4 sm:px-6 lg:px-10">
+        <div className="text-slate-700 mb-28 ">
             {/* Header */}
             <div className="flex items-center justify-between flex-wrap gap-3 mb-10">
                 <h1 className="text-2xl font-semibold mb-8 text-primary">
