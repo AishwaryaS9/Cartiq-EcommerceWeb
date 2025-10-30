@@ -77,7 +77,7 @@ const Hero = () => {
                         </button>
 
                         <div className="flex items-center gap-2 mt-4">
-                            <div className="flex text-yellow-500">
+                            <div className="flex text-[#FFC107]">
                                 <StarIcon fill="currentColor" size={16} />
                                 <StarIcon fill="currentColor" size={16} />
                                 <StarIcon fill="currentColor" size={16} />

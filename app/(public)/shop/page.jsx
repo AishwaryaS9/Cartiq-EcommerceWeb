@@ -22,7 +22,7 @@ function ShopContent() {
     return (
         <div className="min-h-[70vh] mx-6">
             <div className=" max-w-7xl mx-auto">
-                <h1 onClick={() => router.push('/shop')} className="text-2xl font-medium text-slate-500 my-6 flex items-center gap-2 cursor-pointer"> {search && <MoveLeftIcon size={20} />}  All <span className="text-slate-700 font-medium">Products</span></h1>
+                <h1 onClick={() => router.push('/shop')} className="text-2xl font-medium text-primary my-6 flex items-center gap-2 cursor-pointer"> {search && <MoveLeftIcon size={20} />}  All <span className="text-slate-700 font-medium">Products</span></h1>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-32">
                     {filteredProducts.map((product) => <ProductCard key={product.id} product={product} />)}
                 </div>

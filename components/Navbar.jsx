@@ -86,7 +86,7 @@ const Navbar = () => {
                         >
                             <ShoppingCart size={18} />
                             {cartCount > 0 && (
-                                <span className="absolute -top-2 -right-2 text-[10px] text-white bg-customBlack size-4 flex items-center justify-center rounded-full">
+                                <span className="absolute -top-2 -right-2 text-[10px] text-white bg-primary size-4 flex items-center justify-center rounded-full">
                                     {cartCount}
                                 </span>
                             )}
@@ -94,7 +94,7 @@ const Navbar = () => {
 
                         <div className="hidden sm:flex items-center gap-4">
                             {!user ? (
-                                <button onClick={openSignIn} className="px-5 py-2 border border-customBlack text-customBlack hover:bg-customBlack hover:text-white transition rounded-full text-sm font-light uppercase">
+                                <button onClick={openSignIn} className="px-5 py-2 border border-customBlack text-customBlack hover:bg-primary hover:border-none hover:text-white transition rounded-full text-sm font-light uppercase">
                                     Login
                                 </button>
                             ) : (
@@ -219,9 +219,9 @@ const Navbar = () => {
                                             openSignIn();
                                             closeMenu();
                                         }}
-                                        className="mt-6 w-full px-6 py-2 border border-customBlack text-customBlack hover:bg-customBlack hover:text-white transition rounded-full text-sm font-light uppercase"
+                                        className="mt-6 w-full px-6 py-2 border border-customBlack text-customBlack hover:bg-primary hover:border-none hover:text-white transition rounded-full text-sm font-light uppercase"
                                     >
-                                        Login / Sign Up
+                                        Login
                                     </button>
                                 )}
                             </div>

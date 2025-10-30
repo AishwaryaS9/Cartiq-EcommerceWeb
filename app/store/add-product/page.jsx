@@ -121,7 +121,7 @@ export default function StoreAddProduct() {
         >
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-8">
-                <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-primary">
+                <h1 className="text-2xl font-medium tracking-tight text-primary">
                     Add New <span className="text-customBlack">Product</span>
                 </h1>
 
