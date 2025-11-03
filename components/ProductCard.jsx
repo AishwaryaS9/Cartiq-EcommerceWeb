@@ -8,7 +8,6 @@ const ProductCard = ({ product }) => {
 
     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$'
 
-    // calculate the average rating of the product
     const rating = Math.round(product.rating.reduce((acc, curr) => acc + curr.rating, 0) / product.rating.length);
 
     return (
@@ -21,15 +20,15 @@ const ProductCard = ({ product }) => {
                     <p>{product.name}</p>
                     <div className='flex'>
                         {Array(5).fill('').map((_, index) => (
-                            <StarIcon key={index} size={14} className='text-transparent mt-0.5' 
-                            fill={rating >= index + 1 ? "#FFC107" : "#D1D5DB"} />
+                            <StarIcon key={index} size={14} className='text-transparent mt-0.5'
+                                fill={rating >= index + 1 ? "#FFC107" : "#D1D5DB"} />
                         ))}
                     </div>
                 </div>
                 <p>{currency}{product.price}</p>
             </div>
         </Link>
-    )
+    ) 
 }
 
 export default ProductCard
