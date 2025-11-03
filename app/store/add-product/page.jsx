@@ -6,13 +6,9 @@ import { useState } from "react"
 import { toast } from "react-hot-toast"
 import { motion } from "framer-motion"
 import { SparklesIcon, UploadIcon } from "lucide-react"
+import { categories } from "@/assets/assets"
 
 export default function StoreAddProduct() {
-    const categories = [
-        'Electronics', 'Clothing', 'Home & Kitchen', 'Beauty & Health',
-        'Toys & Games', 'Sports & Outdoors', 'Books & Media', 'Food & Drink',
-        'Hobbies & Crafts', 'Others'
-    ]
 
     const [images, setImages] = useState({ 1: null, 2: null, 3: null, 4: null })
     const [productInfo, setProductInfo] = useState({
