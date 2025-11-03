@@ -5,11 +5,14 @@ import Image from "next/image"
 import Loading from "@/components/Loading"
 import { useAuth, useUser } from "@clerk/nextjs"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
+import { Edit } from "lucide-react"
 
 export default function StoreManageProducts() {
     const { getToken } = useAuth()
     const { user } = useUser()
+    const router = useRouter()
     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$'
 
     const [loading, setLoading] = useState(true)
@@ -63,6 +66,7 @@ export default function StoreManageProducts() {
                             <th className="px-6 py-3 font-medium">MRP</th>
                             <th className="px-6 py-3 font-medium">Price</th>
                             <th className="px-6 py-3 font-medium text-center">In Stock</th>
+                            <th className="px-6 py-3 font-medium text-center">Edit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,6 +103,16 @@ export default function StoreManageProducts() {
                                         <div className="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-green-500 transition-colors duration-300"></div>
                                         <span className="absolute left-1 top-1 w-3 h-3 bg-white rounded-full transition-transform duration-300 ease-in-out peer-checked:translate-x-5"></span>
                                     </label>
+                                </td>
+
+                                <td className="px-6 py-3 text-center">
+                                    <button
+                                        // onClick={() => router.push(`/store/product/${product.id}`)}
+                                        className="p-2 hover:bg-slate-100 rounded-full transition"
+                                        title="Edit product"
+                                    >
+                                        <Edit className="w-4 h-4 text-slate-600" />
+                                    </button>
                                 </td>
                             </motion.tr>
                         ))}
@@ -137,6 +151,7 @@ export default function StoreManageProducts() {
                                 <p className="text-xs text-slate-500">Price</p>
                                 <p className="font-medium">{currency}{product.price.toLocaleString()}</p>
                             </div>
+
 
                             <label className="relative inline-flex items-center cursor-pointer">
                                 <input
