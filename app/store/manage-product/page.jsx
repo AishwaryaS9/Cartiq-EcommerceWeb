@@ -6,12 +6,14 @@ import Loading from "@/components/Loading"
 import { useAuth, useUser } from "@clerk/nextjs"
 import axios from "axios"
 import { motion } from "framer-motion"
+import { PackageX, Plus } from "lucide-react";
+import { useRouter } from "next/navigation"
 
 export default function StoreManageProducts() {
     const { getToken } = useAuth()
     const { user } = useUser()
     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$'
-
+    const router = useRouter();
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState([])
 
@@ -46,6 +48,29 @@ export default function StoreManageProducts() {
     }, [user])
 
     if (loading) return <Loading />
+
+    if (products.length === 0) {
+        return (
+            <div className="mb-28 text-slate-700">
+                <h1 className="text-2xl font-medium mb-8 text-primary">
+                    Manage <span className="text-customBlack">Products</span>
+                </h1>
+
+                <div className="flex flex-col items-center justify-center text-center py-16">
+                    <div className="bg-slate-100 rounded-full p-6 mb-6 shadow-sm">
+                        <PackageX className="w-12 h-12 text-primary" />
+                    </div>
+                    <p className="text-slate-600 max-w-md">
+                        No products found. Please add products to manage them here.
+                    </p>
+                    <button className="flex items-center gap-2 mt-8" onClick={() => router.push('/store/add-product')}>
+                        <Plus className="w-4 h-4" />
+                        Add Product
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="mb-28 text-slate-700">
