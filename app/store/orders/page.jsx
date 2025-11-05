@@ -5,6 +5,8 @@ import { useAuth } from "@clerk/nextjs"
 import axios from "axios"
 import toast from "react-hot-toast"
 import { motion, AnimatePresence } from "framer-motion"
+import { PackageSearch } from "lucide-react";
+
 
 export default function StoreOrders() {
     const [orders, setOrders] = useState([])
@@ -61,7 +63,15 @@ export default function StoreOrders() {
             </h1>
 
             {orders.length === 0 ? (
-                <p className="text-slate-500 italic">No orders found.</p>
+                <div className="flex flex-col items-center justify-center text-center py-20">
+                    <div className="bg-slate-100 rounded-full p-6 mb-6 shadow-sm">
+                        <PackageSearch className="w-12 h-12 text-primary" />
+                    </div>
+                    <p className="text-slate-600 text-base">
+                        No orders found. Once customers place orders, you’ll see them listed here.
+                    </p>
+                </div>
+
             ) : (
                 <div className="overflow-x-auto rounded-sm shadow-xs border border-slate-200 bg-white max-w-5xl">
                     <table className="w-full text-sm text-left">
@@ -114,7 +124,8 @@ export default function StoreOrders() {
                         </tbody>
                     </table>
                 </div>
-            )}
+            )
+            }
 
             {/* Modal */}
             <AnimatePresence>
@@ -197,6 +208,6 @@ export default function StoreOrders() {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     )
 }
