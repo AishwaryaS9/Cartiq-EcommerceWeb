@@ -8,8 +8,6 @@ export const metadata = {
 
 export default function RootAdminLayout({ children }) {
 
-    const baseUrl = process.env.NEXT_PUBLIC_CLERK_BASE_URL
-
     return (
         <>
             <SignedIn>
@@ -19,7 +17,7 @@ export default function RootAdminLayout({ children }) {
             </SignedIn>
             <SignedOut>
                 <div className="min-h-screen flex  items-center justify-center">
-                    <SignIn redirectUrlComplete={`${baseUrl}/store`} routing="hash" />
+                    <SignIn fallbackRedirectUrl="/store" routing="hash" />
                 </div>
             </SignedOut>
         </>
