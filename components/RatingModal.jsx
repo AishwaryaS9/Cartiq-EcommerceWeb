@@ -56,13 +56,13 @@ const RatingModal = ({ ratingModal, setRatingModal }) => {
                     ))}
                 </div>
                 <textarea
-                    className='w-full p-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-green-400'
+                    className='w-full p-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-1 focus:ring-primary'
                     placeholder='Write your review (optional)'
                     rows='4'
                     value={review}
                     onChange={(e) => setReview(e.target.value)}
                 ></textarea>
-                <button onClick={e => toast.promise(handleSubmit(), { loading: 'Submitting...' })} className='w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition'>
+                <button onClick={e => toast.promise(handleSubmit(), { loading: 'Submitting...' })} className='w-full bg-primary text-white py-2 rounded-md hover:bg-green-600 transition'>
                     Submit Rating
                 </button>
             </div>
