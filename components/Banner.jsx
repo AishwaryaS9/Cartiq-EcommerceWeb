@@ -21,7 +21,7 @@ export default function Banner() {
         >
             <div className="flex flex-wrap items-center justify-between max-w-7xl mx-auto gap-3">
                 <p className="text-white text-xs sm:text-base" role="text">
-                    🎉 Get <strong>20% OFF</strong> on Your First Order!
+                    {"\u{1F389}"} Get <strong>20% OFF</strong> on Your First Order!
                 </p>
 
                 <div className="flex items-center space-x-3 sm:space-x-6">

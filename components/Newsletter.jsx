@@ -41,13 +41,13 @@ const Newsletter = () => {
                     aria-required="true"
                     aria-label="Enter your email address"
                     placeholder="Enter your email address"
-                    className="flex-1 w-full px-4 py-3 text-slate-800 placeholder-slate-500 rounded-xl sm:rounded-full focus:ring-2 focus:ring-primary/40 outline-none text-sm bg-transparent"
+                    className="flex-1 w-full px-4 py-3 text-slate-800 placeholder-slate-500 rounded-xl sm:rounded-full  outline-none text-sm bg-transparent"
                 />
 
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    className="mt-3 sm:mt-0 sm:ml-2 font-medium bg-primary text-white px-6 py-3 rounded-xl sm:rounded-full hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-transform duration-200"
+                    className="mt-3 sm:mt-0 sm:ml-2 font-medium bg-primary text-white px-6 py-3 rounded-xl sm:rounded-full hover:scale-105 active:scale-95 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-1 transition-transform duration-200"
                     aria-label="Subscribe to newsletter"
                 >
                     Get Updates
