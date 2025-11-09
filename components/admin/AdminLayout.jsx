@@ -47,8 +47,8 @@ const AdminLayout = ({ children }) => {
                 aria-labelledby="unauthorized-heading"
             >
                 <h1
-                    id="unauthorized-heading"
-                    className="text-2xl sm:text-4xl font-semibold text-slate-700 dark:text-slate-300"
+                    id="unauthorized-heading" aria-label="Unauthorized access message"
+                    className="text-2xl sm:text-4xl font-semibold text-slate-400"
                 >
                     You are not authorized to access this page
                 </h1>
@@ -56,7 +56,7 @@ const AdminLayout = ({ children }) => {
                 <Link
                     href="/"
                     aria-label="Return to homepage"
-                    className="bg-slate-700 hover:bg-slate-800 text-white flex items-center gap-2 mt-8 p-3 px-6 text-sm sm:text-base rounded-full transition-colors duration-200"
+                    className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2 mt-8 p-3 px-6 text-sm sm:text-base rounded-full focus:outline-none focus:ring-1 focus:ring-primary transition-colors duration-200"
                 >
                     Go to home <ArrowRightIcon size={18} aria-hidden="true" />
                 </Link>

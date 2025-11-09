@@ -216,7 +216,7 @@ const Footer = () => {
                                     aria-label={`Visit our ${label} page`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group p-2 rounded-full hover:bg-slate-100 focus:ring-2 focus:ring-primary focus:outline-none transition"
+                                    className="group p-2 rounded-full hover:bg-slate-100 focus:outline-none transition"
                                 >
                                     <Icon />
                                 </Link>
@@ -240,7 +240,7 @@ const Footer = () => {
                                             {link.icon && <link.icon />}
                                             <Link
                                                 href={link.path || "#"}
-                                                className="hover:underline transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                                                className="hover:underline transition focus:outline-none"
                                                 aria-label={`Navigate to ${link.text}`}
                                             >
                                                 {link.text}
