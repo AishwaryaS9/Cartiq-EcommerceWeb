@@ -1,19 +1,19 @@
 'use client'
 import { useEffect, useState } from "react"
-import { toast } from "react-hot-toast"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
-import Loading from "@/components/Loading"
 import { useAuth, useUser } from "@clerk/nextjs"
 import axios from "axios"
+import { toast } from "react-hot-toast"
 import { motion } from "framer-motion"
-import { PackageX, Plus } from "lucide-react";
-import { useRouter } from "next/navigation"
+import { PackageX, Plus } from "lucide-react"
+import Loading from "@/components/Loading"
 
 export default function StoreManageProducts() {
     const { getToken } = useAuth()
     const { user } = useUser()
     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$'
-    const router = useRouter();
+    const router = useRouter()
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState([])
 
@@ -49,37 +49,43 @@ export default function StoreManageProducts() {
 
     if (loading) return <Loading />
 
+    //  Empty state
     if (products.length === 0) {
         return (
-            <div className="mb-28 text-slate-700">
-                <h1 className="text-2xl font-medium mb-8 text-primary">
+            <div className="text-slate-700 mb-28 min-h-[calc(100vh-200px)] flex flex-col justify-center items-center text-center px-4">
+                <h1 className="text-2xl font-medium mb-6 text-primary">
                     Manage <span className="text-customBlack">Products</span>
                 </h1>
 
-                <div className="flex flex-col items-center justify-center text-center py-16">
-                    <div className="bg-slate-100 rounded-full p-6 mb-6 shadow-sm">
-                        <PackageX className="w-12 h-12 text-primary" />
+                <div className="bg-white border border-slate-200 rounded-2xl p-10 shadow-sm max-w-md w-full">
+                    <div className="flex flex-col items-center justify-center mb-5">
+                        <div className="bg-slate-100 rounded-full p-6 mb-6 shadow-sm">
+                            <PackageX className="w-12 h-12 text-primary" />
+                        </div>
+                        <p className="text-slate-600 mb-6">
+                            No products found. Please add products to manage them here.
+                        </p>
+                        <button
+                            className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-lg shadow-sm transition"
+                            onClick={() => router.push('/store/add-product')}
+                        >
+                            <Plus className="w-4 h-4" /> Add Product
+                        </button>
                     </div>
-                    <p className="text-slate-600 max-w-md">
-                        No products found. Please add products to manage them here.
-                    </p>
-                    <button className="flex items-center gap-2 mt-8" onClick={() => router.push('/store/add-product')}>
-                        <Plus className="w-4 h-4" />
-                        Add Product
-                    </button>
                 </div>
             </div>
-        );
+        )
     }
 
+    //  Product list view
     return (
-        <div className="mb-28 text-slate-700">
+        <div className="text-slate-700 mb-28 min-h-[calc(100vh-200px)] overflow-hidden">
             <h1 className="text-2xl font-medium mb-8 text-primary">
-                Manage <span className="text-customBlack">Products</span>
+                Manage <span className="text-slate-700">Products</span>
             </h1>
 
             {/* Desktop Table */}
-            <div className="hidden md:block overflow-x-auto border border-slate-200 rounded-xl shadow-xs bg-white">
+            <div className="hidden lg:block overflow-x-auto border border-slate-200 rounded-xl shadow-xs bg-white">
                 <table className="w-full text-left text-sm">
                     <thead className="bg-slate-50 text-slate-600 uppercase tracking-wide text-xs">
                         <tr>
@@ -97,7 +103,8 @@ export default function StoreManageProducts() {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.05 }}
-                                className="border-t border-slate-100 hover:bg-slate-50 transition">
+                                className="border-t border-slate-100 hover:bg-slate-50 transition"
+                            >
                                 <td className="px-6 py-3">
                                     <div className="flex items-center gap-3">
                                         <Image
@@ -132,7 +139,7 @@ export default function StoreManageProducts() {
             </div>
 
             {/* Mobile Card View */}
-            <div className="md:hidden flex flex-col gap-4">
+            <div className="lg:hidden flex flex-col gap-4">
                 {products.map((product, i) => (
                     <motion.div
                         key={product.id}

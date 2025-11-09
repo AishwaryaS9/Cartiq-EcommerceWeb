@@ -1,15 +1,14 @@
 'use client'
+import { useState } from "react"
+import Image from "next/image"
 import { useAuth } from "@clerk/nextjs"
 import axios from "axios"
-import Image from "next/image"
-import { useState } from "react"
 import { toast } from "react-hot-toast"
 import { motion } from "framer-motion"
 import { SparklesIcon, UploadIcon } from "lucide-react"
 import { categories } from "@/assets/assets"
 
 export default function StoreAddProduct() {
-
     const [images, setImages] = useState({ 1: null, 2: null, 3: null, 4: null })
     const [productInfo, setProductInfo] = useState({
         name: "",
@@ -89,7 +88,6 @@ export default function StoreAddProduct() {
             })
             toast.success(data.message)
 
-            // Reset form
             setProductInfo({
                 name: "",
                 description: "",
@@ -110,17 +108,16 @@ export default function StoreAddProduct() {
             onSubmit={(e) => toast.promise(onSubmitHandler(e), { loading: "Adding Product..." })}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-5xl mx-auto text-slate-700 mb-32 
-                       p-5 sm:p-8 md:p-10 rounded-2xl bg-white/70 
-                       backdrop-blur-sm shadow-xs border border-slate-100"
+            transition={{ duration: 0.4 }}
+            className="max-w-5xl mx-auto text-slate-700 mb-32 p-5 sm:p-8 md:p-10 
+                       rounded-2xl bg-white/70 backdrop-blur-sm shadow-xs border border-slate-100 
+                       overflow-hidden min-h-[calc(100vh-200px)]"
         >
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-8">
                 <h1 className="text-2xl font-medium tracking-tight text-primary">
-                    Add New <span className="text-customBlack">Product</span>
+                    Add New <span className="text-slate-700">Product</span>
                 </h1>
-
                 {aiUsed && (
                     <div className="flex items-center gap-2 text-primary bg-secondary px-3 py-1.5 rounded-full text-sm">
                         <SparklesIcon size={16} /> AI Assist Enabled
@@ -133,8 +130,8 @@ export default function StoreAddProduct() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
                 {Object.keys(images).map((key) => (
                     <label key={key} htmlFor={`images${key}`} className="relative group cursor-pointer">
-                        <div className="aspect-square rounded-xl overflow-hidden border-2 border-dashed border-slate-300 flex items-center justify-center
-                         bg-secondary hover:border-primary transition-all">
+                        <div className="aspect-square rounded-xl overflow-hidden border-2 border-dashed border-slate-300 
+                                        flex items-center justify-center bg-secondary hover:border-primary transition-all">
                             {images[key] ? (
                                 <Image
                                     src={URL.createObjectURL(images[key])}
@@ -163,7 +160,6 @@ export default function StoreAddProduct() {
 
             {/* Product Info Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                {/* Left Column */}
                 <div>
                     <label className="flex flex-col gap-2 mb-5">
                         <span className="text-sm font-medium">Product Name</span>
@@ -223,7 +219,6 @@ export default function StoreAddProduct() {
                     </div>
                 </div>
 
-                {/* Right Column */}
                 <div>
                     <label className="flex flex-col gap-2 mb-5">
                         <span className="text-sm font-medium">Description</span>
@@ -245,7 +240,8 @@ export default function StoreAddProduct() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 disabled={loading}
-                className="mt-10 w-full sm:w-auto px-8 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-xl shadow-sm transition-all text-center"
+                className="mt-10 w-full sm:w-auto px-8 py-3 bg-primary hover:bg-primary/90 text-white 
+                           font-medium rounded-xl shadow-sm transition-all text-center"
             >
                 {loading ? "Saving..." : "Add Product"}
             </motion.button>

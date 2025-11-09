@@ -54,7 +54,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Logo */}
-                    <Link href="/" className="relative text-3xl font-semibold text-customBlack focus:outline-none focus:ring-2 focus:ring-primary rounded-md" aria-label="Cartiq homepage">
+                    <Link href="/" className="relative text-3xl font-semibold text-customBlack focus:outline-none" aria-label="Cartiq homepage">
                         <span className='text-primary'>Cartiq</span>
                         <span className='text-customBlack text-4xl leading-0'>.</span>
                         <Protect plan='plus'>
