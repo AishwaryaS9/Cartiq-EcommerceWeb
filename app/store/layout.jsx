@@ -2,8 +2,8 @@ import StoreLayout from "@/components/store/StoreLayout";
 import { SignedIn, SignedOut, SignIn } from "@clerk/nextjs";
 
 export const metadata = {
-    title: "Cartiq - Store Dashboard",
-    description: "Cartiq. - Store Dashboard",
+    title: "Cartiq — Store Dashboard",
+    description: "Cartiq. — Store Dashboard",
 };
 
 export default function RootAdminLayout({ children }) {

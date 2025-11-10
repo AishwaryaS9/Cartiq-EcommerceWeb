@@ -1,11 +1,10 @@
 'use client'
 import { usePathname } from "next/navigation"
-import { HomeIcon, LayoutListIcon, SquarePenIcon, SquarePlusIcon } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
+import { HomeIcon, LayoutListIcon, SquarePenIcon, SquarePlusIcon } from "lucide-react"
 
 const StoreSidebar = ({ storeInfo }) => {
-
     const pathname = usePathname()
 
     const sidebarLinks = [
@@ -18,11 +17,11 @@ const StoreSidebar = ({ storeInfo }) => {
     return (
         <div className="inline-flex h-full flex-col gap-5 border-r border-slate-200 sm:min-w-60">
             <div className="flex flex-col gap-3 justify-center items-center pt-8 max-sm:hidden">
-                <Image className="w-14 h-14 rounded-full shadow-md" src={storeInfo?.logo} alt="" width={80} height={80} />
+                <Image className="w-14 h-14 rounded-full shadow-md" src={storeInfo?.logo} alt={`${storeInfo?.name || "Seller"} profile picture`} width={80} height={80} />
                 <p className="text-customBlack font-medium">{storeInfo?.name}</p>
             </div>
 
-            <div className="max-sm:mt-6">
+            <div>
                 {
                     sidebarLinks.map((link, index) => (
                         <Link key={index} href={link.href} title={link.name} className={`relative flex items-center gap-3 text-customBlack hover:bg-slate-50 p-2.5 transition ${pathname === link.href && 'bg-slate-100 sm:text-customBlack/90'}`}>
