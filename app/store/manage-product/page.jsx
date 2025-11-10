@@ -118,6 +118,7 @@ export default function StoreManageProducts() {
                                         <th scope="col" className="px-6 py-3 font-medium">Description</th>
                                         <th scope="col" className="px-6 py-3 font-medium">MRP</th>
                                         <th scope="col" className="px-6 py-3 font-medium">Price</th>
+                                        <th scope="col" className="px-6 py-3 font-medium">Quantity</th>
                                         <th scope="col" className="px-6 py-3 font-medium text-center">In Stock</th>
                                     </tr>
                                 </thead>
@@ -146,6 +147,7 @@ export default function StoreManageProducts() {
                                             <td className="px-6 py-3 text-slate-500 max-w-md truncate">{product.description}</td>
                                             <td className="px-6 py-3">{currency} {product.mrp.toLocaleString()}</td>
                                             <td className="px-6 py-3 font-medium text-customBlack">{currency} {product.price.toLocaleString()}</td>
+                                            <td className="px-6 py-3">{product.stockQuantity}</td>
                                             <td className="px-6 py-3 text-center">
                                                 <label
                                                     htmlFor={`stock-toggle-${product.id}`}
@@ -196,17 +198,25 @@ export default function StoreManageProducts() {
                                         </div>
                                     </div>
 
-                                    <p className="text-sm text-slate-600 mb-2 line-clamp-2">{product.description}</p>
+                                    <p className="text-sm text-slate-600 mb-3 line-clamp-2">{product.description}</p>
 
                                     <div className="flex justify-between items-center text-sm text-slate-700">
-                                        <div>
+                                        <div className="flex flex-col">
                                             <p className="text-xs text-slate-500">Price</p>
-                                            <p className="font-medium">{currency}{product.price.toLocaleString()}</p>
+                                            <p className="font-medium">
+                                                {currency}
+                                                {product.price.toLocaleString()}
+                                            </p>
+                                        </div>
+
+                                        <div className="flex flex-col items-center">
+                                            <p className="text-xs text-slate-500">Quantity</p>
+                                            <p className="font-medium">{product.stockQuantity}</p>
                                         </div>
 
                                         <label
                                             htmlFor={`mobile-stock-toggle-${product.id}`}
-                                            className="relative inline-flex items-center cursor-pointer"
+                                            className="relative inline-flex items-center cursor-pointer ml-3"
                                             aria-label={`Toggle stock status for ${product.name}`}
                                         >
                                             <input
@@ -225,6 +235,7 @@ export default function StoreManageProducts() {
                                 </motion.div>
                             ))}
                         </div>
+
                     </>
                 )}
             </main>

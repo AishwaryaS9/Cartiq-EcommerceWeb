@@ -157,11 +157,20 @@ const ProductDetails = ({ product }) => {
                         </span>{" "}
                         right now
                     </p>
+
+                </div>
+
+                <div className="flex items-center gap-2 text-slate-500"
+                    aria-label={`Stock quantity information`}>
+                    <p className="text-sm mt-5 text-slate-500">
+                        {product.stockQuantity > 0
+                            && `In stock: ${product.stockQuantity}`}
+                    </p>
                 </div>
 
                 {/* Cart Section */}
                 <div
-                    className="flex items-end flex-wrap gap-6 mt-10"
+                    className="flex items-end flex-wrap gap-6 mt-5"
                     aria-label="Add to cart or update quantity"
                 >
                     {cart[productId] && (
@@ -174,28 +183,40 @@ const ProductDetails = ({ product }) => {
                             </label>
                             <Counter
                                 productId={productId}
+                                stockQuantity={product.stockQuantity}
                                 id={`quantity-${productId}`}
                             />
                         </div>
                     )}
 
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() =>
-                            !cart[productId]
-                                ? addToCartHandler()
-                                : router.push("/cart")
-                        }
-                        className="bg-primary text-white px-8 sm:px-10 py-3 text-sm font-medium rounded-full shadow-md hover:bg-primary/85 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                        aria-label={
-                            !cart[productId]
-                                ? "Add this product to your cart"
-                                : "View your shopping cart"
-                        }
-                    >
-                        {!cart[productId] ? "Add to Cart" : "View Cart"}
-                    </motion.button>
+                    {product.stockQuantity > 0 && (
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => {
+                                if (!cart[productId]) {
+                                    addToCartHandler();
+                                } else {
+                                    router.push("/cart");
+                                }
+                            }}
+                            className="bg-primary text-white px-8 sm:px-10 py-3 text-sm font-medium rounded-full shadow-md hover:bg-primary/85 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                            aria-label={
+                                !cart[productId]
+                                    ? "Add this product to your cart"
+                                    : "View your shopping cart"
+                            }
+                        >
+                            {!cart[productId] ? "Add to Cart" : "View Cart"}
+                        </motion.button>
+                    )}
+
+                    {product.stockQuantity === 0 && (
+                        <p className="text-red-500 font-semibold text-base">
+                            Out of Stock
+                        </p>
+                    )}
+
                 </div>
 
                 <hr
@@ -240,3 +261,4 @@ const ProductDetails = ({ product }) => {
 }
 
 export default ProductDetails
+

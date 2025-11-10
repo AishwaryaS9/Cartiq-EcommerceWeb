@@ -137,7 +137,8 @@ export default function Cart() {
                                                     className="text-center align-middle"
                                                     aria-label={`Quantity for ${item.name}`}
                                                 >
-                                                    <Counter productId={item.id} />
+                                                    <Counter productId={item.id} stockQuantity={item.stockQuantity} />
+
                                                 </td>
                                                 <td
                                                     className="text-center align-middle font-medium"
@@ -200,3 +201,4 @@ export default function Cart() {
         </main>
     )
 }
+
