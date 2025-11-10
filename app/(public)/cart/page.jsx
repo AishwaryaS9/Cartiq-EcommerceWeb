@@ -188,7 +188,7 @@ export default function Cart() {
                         </p>
                         <button
                             onClick={() => router.push('/shop')}
-                            className="mt-6 bg-primary text-white px-5 py-2 rounded-md hover:bg-primary/90 transition"
+                            className="mt-6 bg-primary font-medium text-white px-5 py-2 rounded-md hover:bg-primary/90 transition"
                             aria-label="Browse products in the shop"
                         >
                             Browse Products
