@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { MoveLeftIcon, FilterIcon, ArrowUpDownIcon } from "lucide-react"
 import ProductCard from "@/components/ProductCard"
 import SkeletonLoading from "@/components/SkeletonLoading"
+import Pagination from "@/components/Pagination"
 
 function ShopContent() {
     const searchParams = useSearchParams()
@@ -188,51 +189,11 @@ function ShopContent() {
                         </section>
 
                         {/* PAGINATION */}
-                        {totalPages > 1 && (
-                            <nav
-                                className="flex justify-center items-center flex-wrap gap-2 sm:gap-3 mb-24"
-                                aria-label="Pagination navigation"
-                            >
-                                <button
-                                    disabled={currentPage === 1}
-                                    onClick={() => setCurrentPage((p) => p - 1)}
-                                    className={`px-4 py-2 rounded-md border text-sm transition focus:ring-2 focus:ring-primary focus:outline-none ${currentPage === 1
-                                        ? 'text-gray-400 border-gray-200 cursor-not-allowed'
-                                        : 'text-gray-700 border-gray-300 hover:bg-gray-100'
-                                        }`}
-                                    aria-label="Previous page"
-                                >
-                                    ← Prev
-                                </button>
-
-                                {[...Array(totalPages)].map((_, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => setCurrentPage(i + 1)}
-                                        className={`px-3 py-1.5 rounded-md text-sm font-medium border focus:ring-2 focus:ring-primary focus:outline-none ${currentPage === i + 1
-                                            ? 'bg-primary text-white border-primary'
-                                            : 'border-gray-300 text-gray-700 hover:bg-gray-100'
-                                            }`}
-                                        aria-current={currentPage === i + 1 ? 'page' : undefined}
-                                        aria-label={`Go to page ${i + 1}`}
-                                    >
-                                        {i + 1}
-                                    </button>
-                                ))}
-
-                                <button
-                                    disabled={currentPage === totalPages}
-                                    onClick={() => setCurrentPage((p) => p + 1)}
-                                    className={`px-4 py-2 rounded-md border text-sm transition focus:ring-1 focus:ring-primary focus:outline-none ${currentPage === totalPages
-                                        ? 'text-gray-400 border-gray-200 cursor-not-allowed'
-                                        : 'text-gray-700 border-gray-300 hover:bg-gray-100'
-                                        }`}
-                                    aria-label="Next page"
-                                >
-                                    Next →
-                                </button>
-                            </nav>
-                        )}
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                        />
                     </>
                 )}
             </div>

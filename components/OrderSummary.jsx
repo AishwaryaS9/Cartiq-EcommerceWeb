@@ -250,7 +250,7 @@ const OrderSummary = ({ totalPrice, items }) => {
                         />
                         <button
                             type="submit"
-                            className="bg-slate-600 text-white px-3 rounded hover:bg-slate-800 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-400"
+                            className="bg-primary text-white px-3 rounded hover:bg-primary/90 active:scale-95 transition-all focus:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-primary"
                         >
                             Apply
                         </button>
@@ -271,7 +271,7 @@ const OrderSummary = ({ totalPrice, items }) => {
                             type="button"
                             onClick={() => setCoupon('')}
                             aria-label="Remove coupon code"
-                            className="hover:text-red-700 transition cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 rounded"
+                            className="hover:text-red-700 transition cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-red-500 rounded"
                         >
                             <XIcon size={18} aria-hidden="true" />
                         </button>
@@ -310,7 +310,7 @@ const OrderSummary = ({ totalPrice, items }) => {
                     toast.promise(handlePlaceOrder(e), { loading: 'Placing Order...' })
                 }
                 aria-label="Place your order"
-                className="w-full bg-slate-700 text-white py-2.5 rounded hover:bg-slate-900 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-400"
+                className="w-full bg-primary text-white py-2.5 rounded hover:bg-primary/90 active:scale-95 transition-all focus:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-primary"
             >
                 Place Order
             </button>

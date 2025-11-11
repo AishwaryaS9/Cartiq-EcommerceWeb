@@ -16,6 +16,7 @@ export default function StoreAddProduct() {
         description: "",
         mrp: "",
         price: "",
+        stockQuantity: "",
         category: "",
     })
     const [loading, setLoading] = useState(false)
@@ -78,6 +79,7 @@ export default function StoreAddProduct() {
             formData.append('description', productInfo.description)
             formData.append('mrp', productInfo.mrp)
             formData.append('price', productInfo.price)
+            formData.append('stockQuantity', productInfo.stockQuantity)
             formData.append('category', productInfo.category)
             Object.keys(images).forEach(key => {
                 if (images[key]) formData.append('images', images[key])
@@ -94,6 +96,7 @@ export default function StoreAddProduct() {
                 description: "",
                 mrp: "",
                 price: "",
+                stockQuantity: "",
                 category: "",
             })
             setImages({ 1: null, 2: null, 3: null, 4: null })
@@ -234,6 +237,22 @@ export default function StoreAddProduct() {
                                 ))}
                             </select>
                         </label>
+                        <label className="flex flex-col gap-2">
+                            <span className="text-sm font-medium" id="stock-label">
+                                Stock Quantity
+                            </span>
+                            <input
+                                type="number"
+                                name="stockQuantity"
+                                aria-labelledby="stock-label"
+                                onChange={onChangeHandler}
+                                value={productInfo.stockQuantity}
+                                placeholder="Enter available stock quantity"
+                                className="border border-slate-300 rounded-lg p-2.5 px-4 focus:ring-1 focus:ring-primary outline-none"
+                                required
+                                min="0"
+                            />
+                        </label>
 
                         {/* Prices — same row on md+, stacked on small screens */}
                         <div className="flex flex-col sm:flex-row gap-5 sm:gap-6">
@@ -268,6 +287,7 @@ export default function StoreAddProduct() {
                                     required
                                 />
                             </label>
+
                         </div>
                     </div>
 

@@ -98,8 +98,8 @@ export default function CreateStore() {
                 role="main"
                 aria-label="Login required to access store creation form"
             >
-                <h1 className="text-2xl sm:text-4xl font-semibold">
-                    Please <span className="text-slate-500">Login</span> to continue
+                <h1 className="text-2xl sm:text-3xl font-semibold">
+                    Please <span className="text-slate-500">Login</span> to create your store
                 </h1>
             </main>
         )
