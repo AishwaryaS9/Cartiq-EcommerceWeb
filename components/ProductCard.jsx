@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAuth } from '@clerk/nextjs'
+import toast from 'react-hot-toast'
 import { StarIcon, Heart } from 'lucide-react'
 import { addToFavorites, removeFromFavorites, uploadFavorites } from '@/lib/features/favorites/favoritesSlice'
 
@@ -24,6 +25,11 @@ const ProductCard = ({ product }) => {
     const handleFavoriteClick = async (e) => {
         e.preventDefault()
         e.stopPropagation()
+        const token = await getToken()
+        if (!token) {
+            toast.error('You need to log in to add items to your favorites.')
+            return
+        }
 
         if (isFavorite) {
             dispatch(removeFromFavorites(product.id))

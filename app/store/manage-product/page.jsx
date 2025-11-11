@@ -10,6 +10,8 @@ import { toast } from "react-hot-toast"
 import { motion } from "framer-motion"
 import { PackageX, PenLine, Plus } from "lucide-react"
 import Loading from "@/components/Loading"
+import Pagination from "@/components/Pagination"
+import EditProductModal from "@/components/store/EditProductModal"
 import { updateProduct } from "@/lib/features/product/productSlice"
 
 export default function StoreManageProducts() {
@@ -21,8 +23,11 @@ export default function StoreManageProducts() {
     const [products, setProducts] = useState([])
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [editingProduct, setEditingProduct] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1)
 
     const dispatch = useDispatch()
+
+    const productsPerPage = 10
 
     const handleEditClick = (product) => {
         setEditingProduct({
@@ -72,7 +77,6 @@ export default function StoreManageProducts() {
     const handleProductUpdate = async (e) => {
         e.preventDefault()
         const token = await getToken()
-
         const remainingImagesCount =
             (editingProduct.existingImages?.length || 0) +
             (editingProduct.newImages?.length || 0)
@@ -109,6 +113,12 @@ export default function StoreManageProducts() {
             toast.error(result.payload?.error || 'Failed to update product')
         }
     }
+
+    // Pagination logic
+    const indexOfLastProduct = currentPage * productsPerPage
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage
+    const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct)
+    const totalPages = Math.ceil(products.length / productsPerPage)
 
     if (loading) return <Loading aria-label="Loading products" role="status" />
 
@@ -173,7 +183,7 @@ export default function StoreManageProducts() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {products.map((product, i) => (
+                                    {currentProducts.map((product, i) => (
                                         <motion.tr
                                             key={product.id}
                                             initial={{ opacity: 0, y: 8 }}
@@ -231,7 +241,7 @@ export default function StoreManageProducts() {
 
                         {/* Mobile Cards */}
                         <div className="lg:hidden grid grid-cols-1 gap-4" role="list" aria-label="Mobile product list">
-                            {products.map((product) => (
+                            {currentProducts.map((product) => (
                                 <div key={product.id} className="border border-slate-200 rounded-xl p-4 bg-white shadow-sm">
                                     <div className="flex items-center justify-between mb-3">
                                         <div className="flex items-center gap-3">
@@ -266,282 +276,30 @@ export default function StoreManageProducts() {
                                             />
                                             <div className="w-8 h-4 bg-slate-300 rounded-full peer-checked:bg-green-500 transition-colors duration-300"></div>
                                             <span className="absolute left-0.5 top-0.6 w-3 h-3 bg-white rounded-full transition-transform duration-300 ease-in-out peer-checked:translate-x-4"></span>
-
                                         </label>
                                     </div>
                                 </div>
                             ))}
                         </div>
+
+                        {/* Pagination Controls */}
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                        />
                     </>
                 )}
             </main>
 
             {/* Edit Modal */}
-            {isEditModalOpen && editingProduct && (
-                <div
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="edit-product-title"
-                    className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4 sm:p-6 overflow-y-auto"
-                >
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.2 }}
-                        className="bg-white rounded-2xl w-full max-w-lg shadow-2xl relative flex flex-col max-h-[90vh]"
-                    >
-                        {/* Sticky Header */}
-                        <div className="sticky top-0 bg-white border-b border-slate-200 p-5 flex justify-between items-center rounded-t-2xl">
-                            <h2
-                                id="edit-product-title"
-                                className="text-xl font-medium text-primary"
-                            >
-                                Edit <span className="text-slate-700">Product</span>
-                            </h2>
-                            <button
-                                onClick={handleModalClose}
-                                aria-label="Close edit product modal"
-                                className="text-slate-500 hover:text-primary transition"
-                            >
-                                ✕
-                            </button>
-                        </div>
-
-                        {/* Scrollable Content */}
-                        <div className="overflow-y-auto p-6 space-y-5">
-                            <form onSubmit={handleProductUpdate} className="flex flex-col gap-5">
-                                {/* Product Name */}
-                                <div>
-                                    <label
-                                        htmlFor="edit-name"
-                                        className="block text-sm font-medium text-slate-600 mb-1"
-                                    >
-                                        Product Name
-                                    </label>
-                                    <input
-                                        id="edit-name"
-                                        type="text"
-                                        value={editingProduct.name}
-                                        onChange={(e) =>
-                                            setEditingProduct((p) => ({ ...p, name: e.target.value }))
-                                        }
-                                        placeholder="Enter product name"
-                                        className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
-                                        required
-                                    />
-                                </div>
-
-                                {/* Description */}
-                                <div>
-                                    <label
-                                        htmlFor="edit-description"
-                                        className="block text-sm font-medium text-slate-600 mb-1"
-                                    >
-                                        Description
-                                    </label>
-                                    <textarea
-                                        id="edit-description"
-                                        value={editingProduct.description}
-                                        onChange={(e) =>
-                                            setEditingProduct((p) => ({
-                                                ...p,
-                                                description: e.target.value,
-                                            }))
-                                        }
-                                        rows={3}
-                                        placeholder="Enter product description"
-                                        className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none resize-none"
-                                    />
-                                </div>
-
-                                {/* Pricing */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label
-                                            htmlFor="edit-mrp"
-                                            className="block text-sm font-medium text-slate-600 mb-1"
-                                        >
-                                            Actual Price
-                                        </label>
-                                        <input
-                                            id="edit-mrp"
-                                            type="number"
-                                            value={editingProduct.mrp}
-                                            onChange={(e) =>
-                                                setEditingProduct((p) => ({
-                                                    ...p,
-                                                    mrp: Number(e.target.value),
-                                                }))
-                                            }
-                                            placeholder="Enter MRP"
-                                            className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label
-                                            htmlFor="edit-price"
-                                            className="block text-sm font-medium text-slate-600 mb-1"
-                                        >
-                                            Offer Price
-                                        </label>
-                                        <input
-                                            id="edit-price"
-                                            type="number"
-                                            value={editingProduct.price}
-                                            onChange={(e) =>
-                                                setEditingProduct((p) => ({
-                                                    ...p,
-                                                    price: Number(e.target.value),
-                                                }))
-                                            }
-                                            placeholder="Enter selling price"
-                                            className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Quantity */}
-                                <div>
-                                    <label
-                                        htmlFor="edit-quantity"
-                                        className="block text-sm font-medium text-slate-600 mb-1"
-                                    >
-                                        Stock Quantity
-                                    </label>
-                                    <input
-                                        id="edit-quantity"
-                                        type="number"
-                                        value={editingProduct.stockQuantity}
-                                        onChange={(e) =>
-                                            setEditingProduct((p) => ({
-                                                ...p,
-                                                stockQuantity: Number(e.target.value),
-                                            }))
-                                        }
-                                        placeholder="Enter stock quantity"
-                                        className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
-                                        required
-                                    />
-                                </div>
-
-                                {/* Product Images */}
-                                <section aria-labelledby="image-edit-section">
-                                    <h3
-                                        id="image-edit-section"
-                                        className="text-sm font-semibold text-slate-700 mb-2"
-                                    >
-                                        Product Images
-                                    </h3>
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                                        {[...(editingProduct.existingImages || []), ...(editingProduct.newImages || [])].map(
-                                            (img, idx) => (
-                                                <div
-                                                    key={`image-${idx}`}
-                                                    className="relative group rounded-lg overflow-hidden border border-slate-200 shadow-sm"
-                                                >
-                                                    <Image
-                                                        src={
-                                                            typeof img === "string"
-                                                                ? img
-                                                                : URL.createObjectURL(img)
-                                                        }
-                                                        alt={`Product image ${idx + 1}`}
-                                                        width={300}
-                                                        height={300}
-                                                        className="object-cover w-full h-full"
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        aria-label={`Remove image ${idx + 1}`}
-                                                        onClick={() => {
-                                                            if (typeof img === "string") {
-                                                                setEditingProduct((prev) => ({
-                                                                    ...prev,
-                                                                    existingImages: prev.existingImages.filter(
-                                                                        (i) => i !== img
-                                                                    ),
-                                                                    removedImages: [
-                                                                        ...prev.removedImages,
-                                                                        img,
-                                                                    ],
-                                                                }))
-                                                            } else {
-                                                                setEditingProduct((prev) => ({
-                                                                    ...prev,
-                                                                    newImages: prev.newImages.filter(
-                                                                        (i) => i !== img
-                                                                    ),
-                                                                }))
-                                                            }
-                                                        }}
-                                                        className="absolute top-2 right-2 bg-white/90 hover:bg-white text-red-500 rounded-full p-1 shadow-sm transition"
-                                                    >
-                                                        ✕
-                                                    </button>
-                                                </div>
-                                            )
-                                        )}
-
-                                        {Array.from({
-                                            length: Math.max(
-                                                0,
-                                                4 -
-                                                ((editingProduct.existingImages?.length || 0) +
-                                                    (editingProduct.newImages?.length || 0))
-                                            ),
-                                        }).map((_, idx) => (
-                                            <label
-                                                key={`upload-slot-${idx}`}
-                                                htmlFor={`new-image-${idx}`}
-                                                className="aspect-square rounded-lg border-2 border-dashed border-slate-300 flex items-center justify-center bg-slate-50 hover:border-primary hover:bg-slate-100 cursor-pointer transition"
-                                            >
-                                                <span className="text-xs text-slate-400">Upload</span>
-                                                <input
-                                                    id={`new-image-${idx}`}
-                                                    type="file"
-                                                    accept="image/*"
-                                                    hidden
-                                                    onChange={(e) =>
-                                                        setEditingProduct((prev) => ({
-                                                            ...prev,
-                                                            newImages: [
-                                                                ...prev.newImages,
-                                                                ...Array.from(e.target.files),
-                                                            ],
-                                                        }))
-                                                    }
-                                                />
-                                            </label>
-                                        ))}
-                                    </div>
-                                </section>
-                            </form>
-                        </div>
-
-                        {/* Footer Buttons */}
-                        <div className="sticky bottom-0 bg-white border-t border-slate-200 p-5 flex flex-col sm:flex-row justify-end gap-3 rounded-b-2xl">
-                            <button
-                                type="button"
-                                onClick={handleModalClose}
-                                className="px-4 py-2 border font-medium border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition focus:outline-none focus:ring-1 focus:ring-primary w-full sm:w-auto"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                form="edit-product-form"
-                                className="px-5 py-2 bg-primary font-medium text-white rounded-lg hover:bg-primary/90 transition focus:outline-none focus:ring-1 focus:ring-primary w-full sm:w-auto"
-                            >
-                                Save Changes
-                            </button>
-                        </div>
-                    </motion.div>
-                </div>
-            )}
-
+            <EditProductModal
+                isOpen={isEditModalOpen}
+                product={editingProduct}
+                onClose={handleModalClose}
+                onChange={setEditingProduct}
+                onSubmit={handleProductUpdate}
+            />
         </>
     )
 }

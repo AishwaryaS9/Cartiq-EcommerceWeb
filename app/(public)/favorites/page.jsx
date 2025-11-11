@@ -2,7 +2,7 @@
 import { Suspense, useEffect, useState, useMemo } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@clerk/nextjs"
+import { useAuth, useUser } from "@clerk/nextjs"
 import { MoveLeftIcon } from "lucide-react"
 import ProductCard from "@/components/ProductCard"
 import SkeletonLoading from "@/components/SkeletonLoading"
@@ -12,14 +12,17 @@ function FavoritesContent() {
     const router = useRouter()
     const dispatch = useDispatch()
     const { getToken } = useAuth()
+    const { user } = useUser()
 
     const products = useSelector(state => state.product.list)
     const favoriteItems = useSelector(state => state.favorites.favoriteItems)
     const isLoading = !products || products.length === 0
 
     useEffect(() => {
-        dispatch(fetchFavorites({ getToken }))
-    }, [dispatch, getToken])
+        if (user) {
+            dispatch(fetchFavorites({ getToken }))
+        }
+    }, [dispatch, getToken, user])
 
     const favoriteProducts = useMemo(() => {
         return products.filter(p => favoriteItems.includes(p.id))
@@ -36,11 +39,24 @@ function FavoritesContent() {
 
     useMemo(() => setCurrentPage(1), [favoriteProducts])
 
+    if (!user) {
+        return (
+            <main className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4"
+                role="main"
+                aria-label="Login required to access favorites">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-slate-400">
+                    Please <span className="text-slate-500">Login</span> to view your favorite products.
+                </h2>
+            </main>
+        )
+    }
+
     return (
         <main
             className="min-h-[70vh] mx-4 sm:mx-6 md:mx-8"
             role="main"
-            aria-labelledby="favorites-heading">
+            aria-labelledby="favorites-heading"
+        >
             <div className="max-w-7xl mx-auto">
                 <h1
                     id="favorites-heading"
@@ -49,7 +65,8 @@ function FavoritesContent() {
                     role="link"
                     tabIndex={0}
                     onKeyDown={(e) => e.key === 'Enter' && router.push('/shop')}
-                    aria-label="Go back to shop page">
+                    aria-label="Go back to shop page"
+                >
                     <MoveLeftIcon size={20} aria-hidden="true" />
                     My <span className="text-slate-700 font-medium">Favorites</span>
                 </h1>
@@ -60,14 +77,16 @@ function FavoritesContent() {
                     <div
                         className="text-center py-16 text-slate-700"
                         role="region"
-                        aria-label="No favorites message">
+                        aria-label="No favorites message"
+                    >
                         <p className="text-lg" tabIndex={0}>
                             You haven't added any favorites yet.
                         </p>
                         <button
                             onClick={() => router.push('/shop')}
                             className="mt-6 bg-primary font-medium text-white px-5 py-2 rounded-md hover:bg-primary/90 transition"
-                            aria-label="Browse products in the shop">
+                            aria-label="Browse products in the shop"
+                        >
                             Browse Products
                         </button>
                     </div>
@@ -75,7 +94,8 @@ function FavoritesContent() {
                     <>
                         <section
                             className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 mb-12"
-                            aria-label="Favorite products list">
+                            aria-label="Favorite products list"
+                        >
                             {paginatedFavorites.map((product) => (
                                 <ProductCard
                                     key={product.id}
@@ -147,4 +167,3 @@ export default function FavoritesPage() {
         </Suspense>
     )
 }
-

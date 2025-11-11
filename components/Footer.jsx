@@ -202,9 +202,7 @@ const Footer = () => {
                         </Link>
 
                         <p className="max-w-[420px] mt-6 text-sm leading-relaxed">
-                            Welcome to Cartiq — your ultimate destination for the latest and
-                            smartest gadgets. From smartphones to accessories, we bring
-                            innovation together in one place.
+                            Welcome to Cartiq — your one-stop online marketplace for everything — fashion, gadgets, home, beauty, and more. Shop easily and securely with fast delivery.
                         </p>
 
                         {/* Social Icons */}
@@ -235,18 +233,31 @@ const Footer = () => {
                                     {section.title}
                                 </h3>
                                 <ul className="space-y-2.5">
-                                    {section.links.map((link, i) => (
-                                        <li key={i} className="flex items-center gap-2">
-                                            {link.icon && <link.icon />}
-                                            <Link
-                                                href={link.path || "#"}
-                                                className="hover:underline transition focus:outline-none"
-                                                aria-label={`Navigate to ${link.text}`}
-                                            >
-                                                {link.text}
-                                            </Link>
-                                        </li>
-                                    ))}
+                                    {section.links.map((link, i) => {
+                                        const isEmail = link.text.includes("@");
+                                        const isPhone = link.text.startsWith("+") || link.text.match(/^\d/);
+                                        const href = link.path
+                                            ? link.path
+                                            : isEmail
+                                                ? `mailto:${link.text}`
+                                                : isPhone
+                                                    ? `tel:${link.text.replace(/\s+/g, "")}`
+                                                    : "#";
+
+                                        return (
+                                            <li key={i} className="flex items-center gap-2">
+                                                {link.icon && <link.icon />}
+                                                <Link
+                                                    href={href}
+                                                    className="hover:underline transition focus:outline-none"
+                                                    aria-label={`Navigate to ${link.text}`}
+                                                >
+                                                    {link.text}
+                                                </Link>
+                                            </li>
+                                        );
+                                    })}
+
                                 </ul>
                             </div>
                         ))}
