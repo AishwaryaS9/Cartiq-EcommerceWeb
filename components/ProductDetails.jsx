@@ -186,9 +186,9 @@ const ProductDetails = ({ product }) => {
                     className="flex items-center gap-2 text-slate-500"
                     aria-label={`Stock quantity information`}
                 >
-                    <p className="text-sm mt-5 text-slate-500">
+                    <p className="font-semibold text-base mt-5 text-green-500">
                         {product.stockQuantity > 0 &&
-                            `In stock: ${product.stockQuantity}`}
+                            `In Stock`}
                     </p>
                 </div>
 

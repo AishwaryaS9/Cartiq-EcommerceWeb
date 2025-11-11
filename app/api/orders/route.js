@@ -50,7 +50,7 @@ export async function POST(request) {
         for (const item of items) {
             const product = await prisma.product.findUnique({
                 where: { id: item.id },
-                select: { storeId: true, price: true },
+                select: { storeId: true, price: true, name: true, images: true },
             });
 
             if (!product) {
@@ -138,18 +138,23 @@ export async function POST(request) {
             const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
             const origin = await request.headers.get("origin");
 
+            // Flatten all items from all stores into a single array
+            const allItems = Array.from(ordersByStore.values()).flat();
+
+            // Stripe checkout session with detailed line items
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ["card"],
-                line_items: [
-                    {
-                        price_data: {
-                            currency: "usd",
-                            product_data: { name: "Order" },
-                            unit_amount: Math.round(fullAmount * 100),
+                line_items: allItems.map((item) => ({
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name: item.name || `Product ${item.id}`,
+                            images: item.images?.length ? [item.images[0]] : item.image ? [item.image] : [],
                         },
-                        quantity: 1,
+                        unit_amount: Math.round(item.price * 100),
                     },
-                ],
+                    quantity: item.quantity,
+                })),
                 expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
                 mode: "payment",
                 success_url: `${origin}/loading?nextUrl=orders`,
@@ -160,9 +165,9 @@ export async function POST(request) {
                     appId: "gocart",
                 },
             });
-
             return NextResponse.json({ session });
         }
+
 
         // Clear user cart after COD order
         await prisma.user.update({
