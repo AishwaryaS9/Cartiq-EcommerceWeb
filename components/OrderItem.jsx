@@ -98,7 +98,11 @@ const OrderItem = ({ order }) => {
                 </td>
 
                 {/* Total Price */}
-                <td className="text-center max-md:hidden" role="cell" aria-label={`Total price ${currency}${order.total}`}>
+                <td
+                    className="text-left max-md:hidden whitespace-nowrap w-[15%]"
+                    role="cell"
+                    aria-label={`Total price ${currency}${order.total}`}
+                >
                     {currency}{order.total}
                 </td>
 
@@ -112,9 +116,13 @@ const OrderItem = ({ order }) => {
                 </td>
 
                 {/* Order Status */}
-                <td className="text-left space-y-2 text-sm max-md:hidden" role="cell" aria-label={`Order status: ${formattedStatus}`}>
+                <td
+                    className="text-left space-y-2 text-sm max-md:hidden whitespace-nowrap w-[1%]"
+                    role="cell"
+                    aria-label={`Order status: ${formattedStatus}`}
+                >
                     <div
-                        className={`flex items-center justify-center gap-1 rounded-full p-1 ${order.status === 'confirmed'
+                        className={`inline-flex items-center justify-center gap-1 rounded-full px-4 py-2 whitespace-nowrap ${order.status === 'confirmed'
                             ? 'text-yellow-500 bg-yellow-100'
                             : order.status === 'delivered'
                                 ? 'text-green-500 bg-green-100'
@@ -125,6 +133,7 @@ const OrderItem = ({ order }) => {
                         <span className="capitalize">{formattedStatus}</span>
                     </div>
                 </td>
+
             </tr>
 
             {/* Mobile View */}

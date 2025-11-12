@@ -71,14 +71,14 @@ export default function Orders() {
                             {/* Orders Table */}
                             <div className="overflow-x-auto" role="region" aria-label="Orders list">
                                 <table
-                                    className="w-full max-w-5xl text-slate-500 table-auto border-separate border-spacing-y-12 border-spacing-x-4"
+                                    className="w-full max-w-5xl text-slate-500 table-fixed border-separate border-spacing-y-12 border-spacing-x-4"
                                     aria-describedby="orders-table-caption">
                                     <thead className="max-md:hidden">
                                         <tr className="text-slate-600 text-sm sm:text-base">
-                                            <th scope="col" className="text-left p-2">Product</th>
-                                            <th scope="col" className="text-center p-2">Total Price</th>
-                                            <th scope="col" className="text-left p-2">Address</th>
-                                            <th scope="col" className="text-left p-2">Status</th>
+                                            <th scope="col" className="text-left p-2 w-[45%]">Product</th>
+                                            <th scope="col" className="text-left w-[15%] whitespace-nowrap">Total Price</th>
+                                            <th scope="col" className="text-left p-2 w-[30%]">Address</th>
+                                            <th scope="col" className="text-left p-2 w-[10%] whitespace-nowrap">Status</th>
                                         </tr>
                                     </thead>
 
