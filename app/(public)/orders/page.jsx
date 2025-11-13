@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import PageTitle from "@/components/PageTitle"
 import Loading from "@/components/Loading";
 import OrderItem from "@/components/OrderItem";
+import { useSelector } from "react-redux";
 
 export default function Orders() {
     const { getToken } = useAuth();
@@ -15,6 +16,10 @@ export default function Orders() {
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const orderSummary = useSelector((state) => state.order.currentOrder)
+    console.log("Order summary", orderSummary)
+
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -44,6 +49,9 @@ export default function Orders() {
     if (!isLoaded || loading) {
         return <Loading aria-label="Loading your orders..." />;
     }
+
+    if (!orderSummary) return <p>No order found.</p>
+
 
     return (
         <main
@@ -112,7 +120,7 @@ export default function Orders() {
                     </div>
                 )}
             </div>
-        </main >
+        </main>
     );
 
 

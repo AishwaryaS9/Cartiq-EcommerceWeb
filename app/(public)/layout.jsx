@@ -11,6 +11,7 @@ import { fetchCart, uploadCart } from "@/lib/features/cart/cartSlice";
 import { fetchAddress } from "@/lib/features/address/addressSlice";
 import { fetchUserRatings } from "@/lib/features/rating/ratingSlice";
 import { fetchFavorites, resetFavorites } from "@/lib/features/favorites/favoritesSlice";
+import { fetchOrderSummary } from "@/lib/features/order/orderSlice";
 
 export default function PublicLayout({ children }) {
     const dispatch = useDispatch();
@@ -28,6 +29,7 @@ export default function PublicLayout({ children }) {
             dispatch(fetchAddress({ getToken }));
             dispatch(fetchUserRatings({ getToken }));
             dispatch(fetchFavorites({ getToken }));
+            dispatch(fetchOrderSummary({ getToken }))
         } else {
             dispatch(resetFavorites());
         }

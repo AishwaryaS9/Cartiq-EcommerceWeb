@@ -4,7 +4,7 @@ import { PaymentMethod } from "@prisma/client";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-// GET all orders for a user
+// POST orders for a user
 export async function POST(request) {
     try {
         const { userId, has } = getAuth(request);
@@ -144,7 +144,7 @@ export async function POST(request) {
                 },
             });
 
-            return NextResponse.json({ session });
+            return NextResponse.json({ session, orderIds });
         }
 
         // Clear user cart for COD orders
@@ -155,7 +155,11 @@ export async function POST(request) {
             });
         }
 
-        return NextResponse.json({ message: "Orders placed successfully" });
+        return NextResponse.json({
+            message: "Orders placed successfully",
+            orderIds,
+        });
+
     } catch (error) {
         console.error("Order creation error:", error);
         return NextResponse.json(
@@ -164,7 +168,6 @@ export async function POST(request) {
         );
     }
 }
-
 
 export async function GET(request) {
     try {

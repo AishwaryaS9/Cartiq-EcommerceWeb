@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { PlusIcon, SquarePenIcon, XIcon } from 'lucide-react';
 import AddressModal from './AddressModal';
 import { fetchCart } from '@/lib/features/cart/cartSlice';
-
+import { setOrderSummary } from '@/lib/features/order/orderSlice';
 
 const OrderSummary = ({ totalPrice, items }) => {
     const { user } = useUser();
@@ -64,6 +64,15 @@ const OrderSummary = ({ totalPrice, items }) => {
 
             if (paymentMethod === 'STRIPE') {
                 // Stripe will redirect automatically to success/cancel URLs
+                dispatch(setOrderSummary({
+                    orderIds: data.orderIds,
+                    address: selectedAddress,
+                    items,
+                    totalPrice,
+                    paymentMethod,
+                    coupon,
+                    timestamp: new Date().toISOString(),
+                }));
                 window.location.href = data.session.url;
             } else {
                 // COD flow: show invoice modal
@@ -326,3 +335,4 @@ const OrderSummary = ({ totalPrice, items }) => {
 };
 
 export default OrderSummary;
+
