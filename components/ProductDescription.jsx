@@ -1,13 +1,23 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, StarIcon } from "lucide-react"
+import { fetchStore } from "@/lib/features/store/storeSlice"
+import { useDispatch } from "react-redux"
 
 const ProductDescription = ({ product }) => {
     const tabs = ['Description', 'Reviews']
 
     const [selectedTab, setSelectedTab] = useState('Description')
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (product?.store?.username) {
+            dispatch(fetchStore(product.store.username))
+        }
+    }, [product, dispatch])
 
     return (
         <section

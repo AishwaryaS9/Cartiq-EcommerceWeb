@@ -1,16 +1,46 @@
 'use client';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import toast from 'react-hot-toast';
 import { XIcon, CheckCircle2 } from 'lucide-react';
+import { fetchStore } from '@/lib/features/store/storeSlice';
 
 export default function PaymentSuccess() {
     const router = useRouter();
     const [showModal, setShowModal] = useState(true);
+
+    const dispatch = useDispatch();
+
     const order = useSelector((state) => state.order.currentOrder);
+
+    useEffect(() => {
+        if (!order?.items) return;
+
+        const uniqueStoreUsernames = [
+            ...new Set(order.items
+                .map(item => item.store?.username)
+                .filter(Boolean)
+            )
+        ];
+
+        uniqueStoreUsernames.forEach(username => {
+            dispatch(fetchStore(username));
+        });
+
+    }, [order, dispatch]);
+
+
+    const firstStore = order.items?.[0]?.store || {};
+    console.log("first store", firstStore)
+    const storeAddress = [
+        firstStore.address
+    ]
+        .filter(Boolean) // remove empty parts
+        .join(', ');
+
 
     const downloadInvoice = () => {
         if (!order) {
@@ -48,8 +78,10 @@ export default function PaymentSuccess() {
         doc.text('Sold By :', margin, y);
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(10);
-        doc.text('Cartiq Retail Pvt. Ltd.', margin, y + 15);
-        doc.text('123 Innovation Park, Bengaluru, Karnataka, 560001', margin, y + 28);
+         doc.text('Cartiq — Shopping Made Simple', margin, y + 15);
+        //doc.text(firstStore.name || 'Store Name Not Available', margin, y + 15);
+        //doc.text(storeAddress || 'Store Address Not Available', margin, y + 28);
+        doc.text('794 Francisco, 94102', margin, y + 28);
         doc.text('PAN No: AACCR1234X', margin, y + 41);
         doc.text('GST Registration No: 29AACCR1234X1Z7', margin, y + 54);
 
@@ -65,12 +97,12 @@ export default function PaymentSuccess() {
         doc.setFont('helvetica', 'bold');
         // doc.text('Order Number:', margin, y);
         // doc.text('Invoice Number:', margin + 220, y);
-        doc.text('Order Date:', margin + 400, y);
+        doc.text('Order Date:', margin, y);
         y += 15;
         doc.setFont('helvetica', 'normal');
         // doc.text(safeText(orderId), margin, y);
         // doc.text(safeText(invoiceNo), margin + 220, y);
-        doc.text(safeText(orderDate), margin + 400, y);
+        doc.text(safeText(orderDate), margin, y);
         line(y + 10);
 
         // Billing & Shipping
@@ -212,7 +244,8 @@ export default function PaymentSuccess() {
 
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="relative bg-white p-6 rounded-xl shadow-2xl w-[95%] max-w-2xl max-h-[90vh] overflow-y-auto">
+            {/* <div className="relative bg-white p-6 rounded-xl shadow-2xl w-[95%] max-w-2xl max-h-[90vh] overflow-y-auto"> */}
+            <div className="bg-white p-6 rounded-xl shadow-xl w-[90%] max-w-md text-center">
                 {/* Close Icon */}
                 <button
                     onClick={handleClose}
