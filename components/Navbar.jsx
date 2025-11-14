@@ -126,7 +126,7 @@ const Navbar = () => {
                         {/* Mobile Menu Toggle */}
                         <button
                             onClick={() => setMenuOpen(!menuOpen)}
-                            className="relative sm:hidden text-customBlack/80 hover:text-customBlack focus:outline-none focus:ring-2 focus:ring-primary rounded-md"
+                            className="relative sm:hidden text-customBlack/80 hover:text-customBlack focus:outline-none"
                             aria-label="Toggle mobile menu"
                             aria-expanded={menuOpen}
                             aria-controls="mobile-navigation"

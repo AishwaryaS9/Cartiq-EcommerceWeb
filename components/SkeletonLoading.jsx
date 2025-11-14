@@ -4,7 +4,7 @@ import React from 'react'
 const SkeletonLoading = ({ displayQuantity }) => {
     return (
         <div
-            className="mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-8 xl:gap-12 animate-pulse"
+            className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 xl:gap-12 justify-items-center animate-pulse"
             role="status"
             aria-live="polite"
             aria-label="Loading products">
