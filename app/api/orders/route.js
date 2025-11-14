@@ -101,12 +101,21 @@ export async function POST(request) {
 
                     // Fast stock update using decrement + Promise.all
                     await Promise.all(
-                        sellerItems.map((item) =>
-                            tx.product.update({
+                        sellerItems.map(async (item) => {
+                            const product = await tx.product.findUnique({
                                 where: { id: item.id },
-                                data: { stockQuantity: { decrement: item.quantity } },
-                            })
-                        )
+                                select: { stockQuantity: true },
+                            });
+
+                            if (!product) return;
+
+                            const newStock = Math.max(product.stockQuantity - item.quantity, 0);
+
+                            await tx.product.update({
+                                where: { id: item.id },
+                                data: { stockQuantity: newStock },
+                            });
+                        })
                     );
                 }
             },

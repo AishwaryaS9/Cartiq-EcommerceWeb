@@ -9,6 +9,7 @@ import { PlusIcon, SquarePenIcon, XIcon } from 'lucide-react';
 import AddressModal from './AddressModal';
 import { fetchCart } from '@/lib/features/cart/cartSlice';
 import { setOrderSummary } from '@/lib/features/order/orderSlice';
+import { fetchProducts } from '@/lib/features/product/productSlice';
 
 const OrderSummary = ({ totalPrice, items }) => {
     const { user } = useUser();
@@ -73,12 +74,15 @@ const OrderSummary = ({ totalPrice, items }) => {
                     coupon,
                     timestamp: new Date().toISOString(),
                 }));
+                dispatch(fetchProducts({}));
                 window.location.href = data.session.url;
             } else {
                 // COD flow: show invoice modal
                 toast.success(data.message);
                 dispatch(fetchCart({ getToken }));
-                setShowInvoiceModal(true);
+                dispatch(fetchProducts({}));
+                router.push('/orders');
+                // setShowInvoiceModal(true);
             }
         } catch (error) {
             console.error(error);
