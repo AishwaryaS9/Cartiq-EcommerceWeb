@@ -20,9 +20,10 @@ export default function PaymentSuccess() {
         if (!order?.items) return;
 
         const uniqueStoreUsernames = [
-            ...new Set(order.items
-                .map(item => item.store?.username)
-                .filter(Boolean)
+            ...new Set(
+                order.items
+                    .map(item => item.store?.username)
+                    .filter(Boolean)
             )
         ];
 
@@ -33,22 +34,12 @@ export default function PaymentSuccess() {
     }, [order, dispatch]);
 
 
-    const firstStore = order.items?.[0]?.store || {};
-    console.log("first store", firstStore)
-    const storeAddress = [
-        firstStore.address
-    ]
-        .filter(Boolean) // remove empty parts
-        .join(', ');
-
-
     const downloadInvoice = () => {
         if (!order) {
             toast.error('No order data found.');
             return;
         }
 
-        // Helper to prevent jsPDF.text errors
         const safeText = (value) => (value ? String(value) : '');
 
         const doc = new jsPDF({ unit: 'pt', format: 'a4' });
@@ -78,9 +69,9 @@ export default function PaymentSuccess() {
         doc.text('Sold By :', margin, y);
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(10);
-         doc.text('Cartiq — Shopping Made Simple', margin, y + 15);
-        //doc.text(firstStore.name || 'Store Name Not Available', margin, y + 15);
-        //doc.text(storeAddress || 'Store Address Not Available', margin, y + 28);
+
+        // Branding Only, stores appear inside item table
+        doc.text('Cartiq — Shopping Made Simple', margin, y + 15);
         doc.text('794 Francisco, 94102', margin, y + 28);
         doc.text('PAN No: AACCR1234X', margin, y + 41);
         doc.text('GST Registration No: 29AACCR1234X1Z7', margin, y + 54);
@@ -90,22 +81,16 @@ export default function PaymentSuccess() {
             ? new Date(order.timestamp).toLocaleDateString()
             : new Date().toLocaleDateString();
 
-        const orderId = order.orderId || order.id || order._id || '00000000';
-        // const invoiceNo = 'INV-' + orderId.toString().slice(0, 8).toUpperCase();
-
         y += 80;
         doc.setFont('helvetica', 'bold');
-        // doc.text('Order Number:', margin, y);
-        // doc.text('Invoice Number:', margin + 220, y);
         doc.text('Order Date:', margin, y);
+
         y += 15;
         doc.setFont('helvetica', 'normal');
-        // doc.text(safeText(orderId), margin, y);
-        // doc.text(safeText(invoiceNo), margin + 220, y);
         doc.text(safeText(orderDate), margin, y);
         line(y + 10);
 
-        // Billing & Shipping
+        // Billing + Shipping
         y += 25;
         doc.setFont('helvetica', 'bold');
         doc.text('Billing Address:', margin, y);
@@ -114,6 +99,7 @@ export default function PaymentSuccess() {
         y += 15;
         doc.setFont('helvetica', 'normal');
         const addr = order.address || {};
+
         const billing = [
             safeText(addr.name),
             `${addr.street || ''}`,
@@ -121,74 +107,84 @@ export default function PaymentSuccess() {
             `${addr.country || 'India'}`,
             `Phone: ${addr.phone || 'N/A'}`,
         ];
-        const shipping = [
-            safeText(addr.name),
-            `${addr.street || ''}`,
-            `${addr.city || ''}, ${addr.state || ''}, ${addr.zip || ''}`,
-            `${addr.country || 'India'}`,
-            `Phone: ${addr.phone || 'N/A'}`,
-        ];
+
+        const shipping = [...billing];
+
         billing.forEach((lineText, i) => doc.text(lineText, margin, y + 14 * i));
-        shipping.forEach((lineText, i) => doc.text(lineText, margin + 250, y + 14 * i));
+        shipping.forEach((lineText, i) =>
+            doc.text(lineText, margin + 250, y + 14 * i)
+        );
 
         y += 90;
         line(y);
 
         // Items Table
-        const items = Array.isArray(order.items) ? order.items : [];
-        const tableData = items.map((item, idx) => [
-            idx + 1,
-            safeText(item.name),
-            // safeText(item.orderId || order.orderIds?.[0] || 'N/A'), 
-            `$${Number(item.price || 0).toFixed(2)}`,
-            '0.00',
-            safeText(item.quantity),
-            `$${(item.price * item.quantity).toFixed(2)}`,
-            '18%',
-            'IGST',
-            `$${((item.price * item.quantity) * 0.18).toFixed(2)}`,
-            `$${((item.price * item.quantity) * 1.18).toFixed(2)}`,
-        ]);
+        const items = Array.isArray(order?.items) ? order.items : [];
+
+        const tableData = items.map((item, idx) => {
+            const storeName = item.store?.name || "N/A";
+            const storeAddress = item.store?.address || "N/A";
+
+            return [
+                idx + 1,
+                safeText(item.name),
+                safeText(storeName),
+                safeText(storeAddress),
+                `$${Number(item.price).toFixed(2)}`,
+                item.quantity,
+                `$${(item.price * item.quantity).toFixed(2)}`,
+                '18%',
+                `$${((item.price * item.quantity) * 0.18).toFixed(2)}`,
+            ];
+        });
+
 
         autoTable(doc, {
             startY: y + 20,
             head: [
                 [
                     'Sl. No',
-                    'Description',
-                    'Unit Price',
-                    'Discount',
+                    'Product',
+                    'Store',
+                    'Address',
+                    'Price',
                     'Qty',
-                    'Net Amount',
-                    'Tax Rate',
-                    'Tax Type',
-                    'Tax Amt',
-                    'Total Amt',
+                    'Net',
+                    'Tax',
+                    'Total',
                 ],
             ],
             body: tableData,
-            styles: { fontSize: 8, cellPadding: 4, lineColor: 230, lineWidth: 0.2 },
-            headStyles: { fillColor: [245, 245, 245], textColor: 20, fontStyle: 'bold' },
+            styles: { fontSize: 8, cellPadding: 3 },
+            headStyles: { fillColor: [240, 240, 240], textColor: 20, fontStyle: 'bold' },
+            alternateRowStyles: { fillColor: null },
+            bodyStyles: { fillColor: null },
             columnStyles: {
-                0: { halign: 'center', cellWidth: 35 },
-                1: { cellWidth: 140 },
-                2: { halign: 'right' },
-                3: { halign: 'right' },
-                4: { halign: 'center' },
-                5: { halign: 'right' },
-                6: { halign: 'center' },
-                7: { halign: 'center' },
-                8: { halign: 'right' },
-                9: { halign: 'right' },
+                0: { halign: 'left', cellWidth: 28 },
+                1: { cellWidth: 100 },  // product
+                2: { cellWidth: 70 },   // store name
+                3: { cellWidth: 110 },  // address
+                4: { halign: 'left', cellWidth: 45 }, // price
+                5: { halign: 'left', cellWidth: 30 }, // qty
+                6: { halign: 'left', cellWidth: 45 }, // net
+                7: { halign: 'left', cellWidth: 35 }, // tax
+                8: { halign: 'left', cellWidth: 45 }, // total
             },
+            tableWidth: 'auto',
         });
+
 
         let finalY = doc.lastAutoTable.finalY + 20;
         line(finalY);
 
         // Totals
-        const subtotal = items.reduce((sum, i) => sum + (i.price || 0) * (i.quantity || 0), 0);
-        const discount = order.coupon ? (subtotal * (order.coupon.discount || 0)) / 100 : 0;
+        const subtotal = items.reduce(
+            (sum, i) => sum + (i.price || 0) * (i.quantity || 0),
+            0
+        );
+        const discount = order.coupon
+            ? (subtotal * (order.coupon.discount || 0)) / 100
+            : 0;
         const gst = subtotal * 0.18;
         const total = subtotal - discount + gst;
 
@@ -209,20 +205,19 @@ export default function PaymentSuccess() {
         let infoY = doc.lastAutoTable.finalY + 25;
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(10);
+
         doc.text(`Mode of Payment: ${safeText(order.paymentMethod)}`, margin, infoY);
         doc.text(`Transaction ID: ${safeText(order.transactionId || 'N/A')}`, margin, infoY + 15);
         doc.text(
             `Date & Time: ${safeText(
-                order.timestamp ? new Date(order.timestamp).toLocaleString() : new Date().toLocaleString()
+                order.timestamp
+                    ? new Date(order.timestamp).toLocaleString()
+                    : new Date().toLocaleString()
             )}`,
             margin,
             infoY + 30
         );
         doc.text(`Whether tax is payable under reverse charge - No`, margin, infoY + 45);
-
-        // Authorized Signatory
-        doc.text('For Cartiq Retail Pvt. Ltd.:', margin, infoY + 90);
-        doc.text('Authorized Signatory', margin, infoY + 110);
 
         // Footer
         const pageHeight = doc.internal.pageSize.height;
@@ -244,9 +239,8 @@ export default function PaymentSuccess() {
 
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            {/* <div className="relative bg-white p-6 rounded-xl shadow-2xl w-[95%] max-w-2xl max-h-[90vh] overflow-y-auto"> */}
-            <div className="bg-white p-6 rounded-xl shadow-xl w-[90%] max-w-md text-center">
-                {/* Close Icon */}
+            <div className="bg-white p-6 rounded-xl shadow-xl w-[90%] max-w-md text-center relative">
+
                 <button
                     onClick={handleClose}
                     className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
@@ -255,7 +249,6 @@ export default function PaymentSuccess() {
                     <XIcon size={22} />
                 </button>
 
-                {/* Header */}
                 <div className="text-center mb-6">
                     <CheckCircle2 className="mx-auto text-green-500" size={40} />
                     <h2 className="text-2xl font-semibold text-green-600 mt-2">
@@ -264,7 +257,6 @@ export default function PaymentSuccess() {
                     <p className="text-gray-500">Your order has been placed successfully.</p>
                 </div>
 
-                {/* Buttons */}
                 <div className="mt-6 space-y-3">
                     <button
                         onClick={downloadInvoice}
