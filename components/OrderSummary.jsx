@@ -291,19 +291,41 @@ const OrderSummary = ({ totalPrice, items }) => {
 
             {/* COD Success Modal */}
             {showInvoiceModal && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-xl shadow-xl w-[90%] max-w-md text-center">
-                        <h2 className="text-2xl font-semibold text-green-600">🎉 Order Placed!</h2>
-                        <p className="mt-2 text-gray-500">Your COD order has been placed successfully.</p>
+                <div
+                    className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+                    role="presentation"
+                >
+                    <section
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="invoice-modal-title"
+                        aria-describedby="invoice-modal-desc"
+                        className="bg-white p-6 rounded-xl shadow-xl w-[90%] max-w-md text-center"
+                    >
+                        <h2
+                            id="invoice-modal-title"
+                            className="text-2xl font-semibold text-green-600"
+                        >
+                            {"\uD83C\uDF89"} Order Placed!
+                        </h2>
+
+                        <p
+                            id="invoice-modal-desc"
+                            className="mt-2 text-gray-500"
+                            aria-live="polite"
+                        >
+                            Your COD order has been placed successfully.
+                        </p>
 
                         <button
-                            // onClick={downloadInvoice}
+                            aria-label="Download invoice"
                             className="mt-4 w-full bg-primary text-white py-2.5 rounded hover:bg-primary/90"
                         >
                             Download Invoice
                         </button>
 
                         <button
+                            aria-label="Go to your orders page"
                             onClick={() => {
                                 setShowInvoiceModal(false);
                                 router.push('/orders');
@@ -312,17 +334,40 @@ const OrderSummary = ({ totalPrice, items }) => {
                         >
                             Go to Orders
                         </button>
-                    </div>
+                    </section>
                 </div>
             )}
 
             {/* Error Modal */}
             {showErrorModal && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-xl shadow-xl w-[90%] max-w-md text-center">
-                        <h2 className="text-2xl font-semibold text-red-600">❌ Payment Failed</h2>
-                        <p className="mt-2 text-gray-500">Something went wrong with your payment.</p>
+                <div
+                    className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+                    role="presentation"
+                >
+                    <section
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="payment-failed-title"
+                        aria-describedby="payment-failed-desc"
+                        className="bg-white p-6 rounded-xl shadow-xl w-[90%] max-w-md text-center"
+                    >
+                        <h2
+                            id="payment-failed-title"
+                            className="text-2xl font-semibold text-red-600"
+                        >
+                            {"\u274C"} Payment Failed
+                        </h2>
+
+                        <p
+                            id="payment-failed-desc"
+                            className="mt-2 text-gray-500"
+                            aria-live="assertive"
+                        >
+                            Something went wrong with your payment.
+                        </p>
+
                         <button
+                            aria-label="Go to your orders page"
                             onClick={() => {
                                 setShowErrorModal(false);
                                 router.push('/orders');
@@ -331,7 +376,7 @@ const OrderSummary = ({ totalPrice, items }) => {
                         >
                             Go to Orders
                         </button>
-                    </div>
+                    </section>
                 </div>
             )}
         </>
