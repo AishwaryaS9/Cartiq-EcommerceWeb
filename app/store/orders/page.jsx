@@ -6,13 +6,18 @@ import toast from "react-hot-toast"
 import { PackageSearch } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion"
 import Loading from "@/components/Loading"
+import Pagination from "@/components/Pagination"
 
 export default function StoreOrders() {
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
     const [selectedOrder, setSelectedOrder] = useState(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+
     const { getToken } = useAuth()
+
+    const ordersPerPage = 10;
 
     const fetchOrders = async () => {
         try {
@@ -54,6 +59,13 @@ export default function StoreOrders() {
     }
 
     useEffect(() => { fetchOrders() }, [])
+
+    // Pagination logic
+    const indexOfLastProduct = currentPage * ordersPerPage
+    const indexOfFirstProduct = indexOfLastProduct - ordersPerPage
+    const currentOrders = orders.slice(indexOfFirstProduct, indexOfLastProduct)
+    const totalPages = Math.ceil(orders.length / ordersPerPage)
+
 
     if (loading) return <Loading />
 
@@ -105,7 +117,7 @@ export default function StoreOrders() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {orders.map((order, i) => (
+                                    {currentOrders.map((order, i) => (
                                         <motion.tr
                                             key={order.id}
                                             initial={{ opacity: 0, y: 8 }}
@@ -115,9 +127,9 @@ export default function StoreOrders() {
                                             onClick={() => openModal(order)}
                                             tabIndex={0}
                                             role="button"
-                                            aria-label={`Open details for order ${i + 1} by ${order.user?.name}`}
+                                            aria-label={`Open details for order ${indexOfFirstProduct + i + 1} by ${order.user?.name}`}
                                         >
-                                            <td className="pl-5 text-primary font-medium">{i + 1}</td>
+                                            <td className="pl-5 text-primary font-medium">{indexOfFirstProduct + i + 1}</td>
                                             <td className="px-5 py-3">{order.user?.name}</td>
                                             <td className="px-5 py-3 font-medium text-slate-700">${order.total}</td>
                                             <td className="px-5 py-3 text-slate-600">{order.paymentMethod}</td>
@@ -143,7 +155,7 @@ export default function StoreOrders() {
                                                     value={order.status}
                                                     onChange={e => updateOrderStatus(order.id, e.target.value)}
                                                     className="border border-slate-300 rounded-md text-xs px-2 py-1 focus:ring-1 focus:ring-primary focus:outline-none"
-                                                    aria-label={`Change status for order ${i + 1}`}
+                                                    aria-label={`Change status for order ${indexOfFirstProduct + i + 1}`}
                                                 >
                                                     <option value="ORDER_PLACED">ORDER_PLACED</option>
                                                     <option value="PROCESSING">PROCESSING</option>
@@ -164,7 +176,7 @@ export default function StoreOrders() {
                     <section
                         className="lg:hidden flex flex-col gap-4 mt-4"
                         aria-label="Orders List">
-                        {orders.map((order, i) => (
+                        {currentOrders.map((order, i) => (
                             <motion.article
                                 key={order.id}
                                 initial={{ opacity: 0, y: 8 }}
@@ -175,7 +187,7 @@ export default function StoreOrders() {
                                 tabIndex={0}
                             >
                                 <header className="flex justify-between items-center mb-3">
-                                    <p className="font-medium text-customBlack">Order #{i + 1}</p>
+                                    <p className="font-medium text-customBlack">Order #{indexOfFirstProduct + i + 1}</p>
                                     <time
                                         className="text-xs text-slate-500"
                                         dateTime={order.createdAt}
@@ -212,6 +224,12 @@ export default function StoreOrders() {
                     </section>
                 </>
             )}
+
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+            />
 
             {/* Modal */}
             <AnimatePresence>
@@ -298,6 +316,7 @@ export default function StoreOrders() {
                     </motion.div>
                 )}
             </AnimatePresence>
+
         </main>
     )
 }

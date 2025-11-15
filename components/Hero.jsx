@@ -81,7 +81,7 @@ const Hero = () => {
 
                         <button
                             onClick={() => router.push('/shop')}
-                            className="flex items-center gap-2 bg-primary text-white text-base py-3 px-6 rounded-full hover:bg-primary/90 focus:ring-4 focus:ring-primary/40 transition shadow-lg focus:outline-none"
+                            className="flex items-center gap-2 bg-primary text-white text-base py-3 px-6 rounded-full hover:bg-primary/90 focus:ring-1 focus:ring-primary/40 transition shadow-lg focus:outline-none"
                             aria-label="Navigate to the shop page"
                         >
                             Shop Now

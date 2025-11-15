@@ -170,7 +170,7 @@ const Footer = () => {
             title: "CONTACT",
             links: [
                 { text: "+1-212-456-7890", icon: PhoneIcon },
-                { text: "contact@example.com", icon: MailIcon },
+                { text: "support@cartiq.com", icon: MailIcon },
                 { text: "794 Francisco, 94102", icon: MapPinIcon },
             ],
         },

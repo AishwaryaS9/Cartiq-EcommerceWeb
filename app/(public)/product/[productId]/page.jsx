@@ -67,7 +67,7 @@ export default function Product() {
                     content={product?.description || "Product details and reviews."}
                 />
                 <meta property="og:type" content="product" />
-                <meta property="og:url" content={`https://yourdomain.com/product/${productId}`} />
+                <meta property="og:url" content={`https://cartiq-ecommerce-web.vercel.app/product/${productId}`} />
                 {product?.image && (
                     <meta property="og:image" content={product.image} />
                 )}

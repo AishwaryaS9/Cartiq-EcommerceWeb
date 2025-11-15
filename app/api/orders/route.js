@@ -4,6 +4,7 @@ import { PaymentMethod } from "@prisma/client";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
+// POST orders for a user
 export async function POST(request) {
     try {
         const { userId, has } = getAuth(request);
@@ -13,35 +14,28 @@ export async function POST(request) {
 
         const { addressId, items, couponCode, paymentMethod } = await request.json();
 
-        // Validate required fields
-        if (!addressId || !paymentMethod || !items || !Array.isArray(items) || items.length === 0) {
+        // Validate basic data
+        if (!addressId || !paymentMethod || !Array.isArray(items) || items.length === 0) {
             return NextResponse.json({ error: "Missing order details" }, { status: 400 });
         }
 
-        // Handle coupon logic
+        // Validate coupon
         let coupon = null;
         if (couponCode) {
-            coupon = await prisma.coupon.findUnique({
-                where: { code: couponCode },
-            });
-
+            coupon = await prisma.coupon.findUnique({ where: { code: couponCode } });
             if (!coupon) {
                 return NextResponse.json({ error: "Coupon not found" }, { status: 400 });
             }
         }
 
-        // Check coupon for new users
-        if (couponCode && coupon.forNewUser) {
-            const userOrders = await prisma.order.findMany({ where: { userId } });
-            if (userOrders.length > 0) {
-                return NextResponse.json({ error: "Coupon valid for new users only" }, { status: 400 });
-            }
+        // Coupon restrictions
+        const userOrders = await prisma.order.count({ where: { userId } });
+        if (coupon?.forNewUser && userOrders > 0) {
+            return NextResponse.json({ error: "Coupon valid for new users only" }, { status: 400 });
         }
 
         const isPlusMember = has({ plan: "plus" });
-
-        // Check coupon for members
-        if (couponCode && coupon.forMember && !isPlusMember) {
+        if (coupon?.forMember && !isPlusMember) {
             return NextResponse.json({ error: "Coupon valid for members only" }, { status: 400 });
         }
 
@@ -50,7 +44,7 @@ export async function POST(request) {
         for (const item of items) {
             const product = await prisma.product.findUnique({
                 where: { id: item.id },
-                select: { storeId: true, price: true },
+                select: { storeId: true, price: true, name: true, images: true },
             });
 
             if (!product) {
@@ -58,102 +52,100 @@ export async function POST(request) {
             }
 
             const storeId = product.storeId;
-            if (!ordersByStore.has(storeId)) {
-                ordersByStore.set(storeId, []);
-            }
-
-            ordersByStore.get(storeId).push({
-                ...item,
-                price: product.price,
-            });
+            if (!ordersByStore.has(storeId)) ordersByStore.set(storeId, []);
+            ordersByStore.get(storeId).push({ ...item, ...product });
         }
 
-        let orderIds = [];
+        const orderIds = [];
         let fullAmount = 0;
         let isShippingFeeAdded = false;
 
-        // Use a transaction for all order + stock updates
-        await prisma.$transaction(async (tx) => {
-            for (const [storeId, sellerItems] of ordersByStore.entries()) {
-                let total = sellerItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        // Single transaction for all orders
+        await prisma.$transaction(
+            async (tx) => {
+                for (const [storeId, sellerItems] of ordersByStore.entries()) {
+                    let total = sellerItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
-                // Apply coupon discount
-                if (couponCode) {
-                    total -= (total * coupon.discount) / 100;
-                }
+                    // Apply coupon
+                    if (coupon) total -= (total * coupon.discount) / 100;
 
-                // Apply one-time shipping fee for non-members
-                if (!isPlusMember && !isShippingFeeAdded) {
-                    total += 5;
-                    isShippingFeeAdded = true;
-                }
+                    // One-time shipping fee for non-members
+                    if (!isPlusMember && !isShippingFeeAdded) {
+                        total += 5;
+                        isShippingFeeAdded = true;
+                    }
 
-                fullAmount += parseFloat(total.toFixed(2));
+                    total = parseFloat(total.toFixed(2));
+                    fullAmount += total;
 
-                //  Create the order
-                const order = await tx.order.create({
-                    data: {
-                        userId,
-                        storeId,
-                        addressId,
-                        total: parseFloat(total.toFixed(2)),
-                        paymentMethod,
-                        isCouponUsed: !!coupon,
-                        coupon: coupon || {},
-                        orderItems: {
-                            create: sellerItems.map((item) => ({
-                                productId: item.id,
-                                quantity: item.quantity,
-                                price: item.price,
-                            })),
-                        },
-                    },
-                });
-
-                orderIds.push(order.id);
-
-                //  Update stock quantity for all products in this order
-                for (const item of sellerItems) {
-                    const product = await tx.product.findUnique({
-                        where: { id: item.id },
-                        select: { stockQuantity: true, inStock: true },
-                    });
-
-                    if (!product) continue;
-
-                    const newQuantity = Math.max(product.stockQuantity - item.quantity, 0);
-
-                    await tx.product.update({
-                        where: { id: item.id },
+                    // Create order with order items
+                    const order = await tx.order.create({
                         data: {
-                            stockQuantity: newQuantity,
+                            userId,
+                            storeId,
+                            addressId,
+                            total,
+                            paymentMethod,
+                            isCouponUsed: !!coupon,
+                            coupon: coupon || {},
+                            orderItems: {
+                                create: sellerItems.map((item) => ({
+                                    productId: item.id,
+                                    quantity: item.quantity,
+                                    price: item.price,
+                                })),
+                            },
                         },
                     });
-                }
-            }
-        });
+                    orderIds.push(order.id);
 
-        // Stripe payment flow
+                    // Fast stock update using decrement + Promise.all
+                    await Promise.all(
+                        sellerItems.map(async (item) => {
+                            const product = await tx.product.findUnique({
+                                where: { id: item.id },
+                                select: { stockQuantity: true },
+                            });
+
+                            if (!product) return;
+
+                            const newStock = Math.max(product.stockQuantity - item.quantity, 0);
+
+                            await tx.product.update({
+                                where: { id: item.id },
+                                data: { stockQuantity: newStock },
+                            });
+                        })
+                    );
+                }
+            },
+            { timeout: 20000 } // 20s timeout to prevent P2028
+        );
+
+        // Stripe Payment Flow
         if (paymentMethod === "STRIPE") {
-            const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-            const origin = await request.headers.get("origin");
+            const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+            const origin = request.headers.get("origin");
+
+            const allItems = Array.from(ordersByStore.values()).flat();
 
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ["card"],
-                line_items: [
-                    {
-                        price_data: {
-                            currency: "usd",
-                            product_data: { name: "Order" },
-                            unit_amount: Math.round(fullAmount * 100),
+                line_items: allItems.map((item) => ({
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name: item.name || `Product ${item.id}`,
+                            images: item.images?.length ? [item.images[0]] : [],
                         },
-                        quantity: 1,
+                        unit_amount: Math.round(item.price * 100),
                     },
-                ],
+                    quantity: item.quantity,
+                })),
                 expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
                 mode: "payment",
-                success_url: `${origin}/loading?nextUrl=orders`,
-                cancel_url: `${origin}/cart`,
+                success_url: `${origin}/payment-success`,
+                cancel_url: `${origin}/payment-failed`,
                 metadata: {
                     orderIds: orderIds.join(","),
                     userId,
@@ -161,23 +153,31 @@ export async function POST(request) {
                 },
             });
 
-            return NextResponse.json({ session });
+            return NextResponse.json({ session, orderIds });
         }
 
-        // Clear user cart after COD order
-        await prisma.user.update({
-            where: { id: userId },
-            data: { cart: {} },
+        // Clear user cart for COD orders
+        if (paymentMethod === "COD") {
+            await prisma.user.update({
+                where: { id: userId },
+                data: { cart: {} },
+            });
+        }
+
+        return NextResponse.json({
+            message: "Orders placed successfully",
+            orderIds,
         });
 
-        return NextResponse.json({ message: "Orders Placed Successfully" });
     } catch (error) {
         console.error("Order creation error:", error);
-        return NextResponse.json({ error: error.code || error.message }, { status: 400 });
+        return NextResponse.json(
+            { error: error.code || error.message },
+            { status: 400 }
+        );
     }
 }
 
-// GET all orders for a user
 export async function GET(request) {
     try {
         const { userId } = getAuth(request);
