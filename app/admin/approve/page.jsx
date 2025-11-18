@@ -15,6 +15,11 @@ export default function AdminApprove() {
     const [stores, setStores] = useState([])
     const [loading, setLoading] = useState(true)
 
+    const toTitleCase = (str) =>
+        str.replace(/\w\S*/g, (word) =>
+            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        );
+
     const fetchStores = async () => {
         try {
             const token = await getToken()
@@ -36,7 +41,7 @@ export default function AdminApprove() {
                 { storeId, status },
                 { headers: { Authorization: `Bearer ${token}` } }
             )
-            toast.success(data.message)
+            toast.success(toTitleCase(data.message))
             await fetchStores()
         } catch (error) {
             toast.error(error?.response?.data.error || error.message)
