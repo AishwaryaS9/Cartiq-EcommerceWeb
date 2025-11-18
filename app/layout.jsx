@@ -65,7 +65,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <html lang="en" className="scroll-smooth">
         <body className={`${jost.className} antialiased text-slate-800 bg-white`}>
           <StoreProvider>

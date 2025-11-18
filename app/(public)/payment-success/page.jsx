@@ -181,7 +181,7 @@ export default function PaymentSuccess() {
                 currency(item.price * item.quantity * 0.18),
             ]),
             styles: { fontSize: 8, cellPadding: 3, overflow: 'linebreak' },
-            headStyles: { fillColor: [240, 240, 240], fontStyle: 'bold' },
+            headStyles: { fillColor: [240, 240, 240], fontStyle: 'bold', textColor: [0, 0, 0], },
         });
 
         /** TOTALS */
@@ -197,6 +197,15 @@ export default function PaymentSuccess() {
                 ['Total Invoice Value', currency(total)],
             ],
             styles: { fontSize: 9, halign: 'right' },
+            alternateRowStyles: {
+                fillColor: [245, 245, 245],   // light gray background
+                textColor: [0, 0, 0],         // black text
+            },
+
+            bodyStyles: {
+                fillColor: [255, 255, 255],   // white for normal rows
+                textColor: [0, 0, 0],
+            },
             theme: 'plain',
         });
 
