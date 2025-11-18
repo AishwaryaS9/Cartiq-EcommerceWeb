@@ -11,7 +11,6 @@ const jost = Jost({ subsets: ["latin"], weight: ["400", "500", "600", "700", "80
 export const metadata = {
   title: {
     default: "Cartiq — Shopping Made Simple",
-    template: "%s | Cartiq"
   },
   description:
     "Discover Cartiq, your one-stop online marketplace for everything — fashion, gadgets, home, beauty, and more. Shop easily and securely with fast delivery.",
@@ -45,8 +44,8 @@ export const metadata = {
     type: "website"
   },
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png"
   },
   manifest: "/site.webmanifest",
