@@ -36,7 +36,7 @@ export default function RootAdminLayout({ children }) {
                         Please sign in to access your admin dashboard.
                     </p>
                     <div
-                        className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-6 shadow-md"
+                        className="w-full max-w-sm rounded-xl"
                         aria-label="Admin login form"
                     >
                         <SignIn
